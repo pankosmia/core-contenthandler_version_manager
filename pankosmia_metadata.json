@@ -1,0 +1,18 @@
+{
+  "id": "contenthandler-template",
+  "require": {
+    "net": false,
+    "debug": true
+  },
+  "i18n": {
+    "title": {
+      "en": "contenthandler-template"
+    },
+    "summary": {
+      "en": "contenthandler-template"
+    },
+    "stub_content": {
+      "en": "Content goes here"
+    }
+  }
+}
