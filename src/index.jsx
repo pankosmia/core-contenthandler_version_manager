@@ -2,8 +2,7 @@ import {createRoot} from "react-dom/client";
 import {SpaContainer} from "pithekos-lib";
 import {createHashRouter, RouterProvider} from "react-router-dom";
 import './index.css';
-import CreatePage from "./pages/create";
-import UpdatePage from "./pages/update"
+import VersionManager from "./pages/VersionManager";
 import App from "./App";
 
 const router = createHashRouter([
@@ -12,12 +11,8 @@ const router = createHashRouter([
         element:<App/>
     },
     {
-        path: "createPage",
-        element: <CreatePage/>
-    },
-    {
-        path: "updatePage",
-        element: <UpdatePage/>,
+        path: "version_manager",
+        element:<VersionManager/> 
     }
 ]);
 

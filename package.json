@@ -1,14 +1,15 @@
 {
-  "name": "contenthandler-template",
+  "name": "core-contenthandler_version_manager",
   "version": "0.0.1",
   "private": true,
-  "homepage": "/clients/contenthandler-template",
+  "homepage": "/clients/core-contenthandler_version_manager",
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
     "@mui/material": "^6.1.5",
     "eslint-config-react-app": "^7.0.1",
     "pithekos-lib": "^0.11.4",
+    "prop-types": "^15.8.1",
     "react": "^17.0.0 || ^18.0.0",
     "react-dom": "^17.0.0 || ^18.0.0",
     "react-router-dom": "^7.9.4"

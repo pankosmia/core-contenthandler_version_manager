@@ -1,3 +1,3 @@
-# contenthandler-template
+# core-contenthandler_version_manager
 
-contenthandler-template
+core-contenthandler_version_manager

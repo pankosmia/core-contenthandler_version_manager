@@ -1,15 +1,17 @@
 {
-  "id": "contenthandler-template",
+  "id": "core-contenthandler_version_manager",
+  "exclude_from_menu": true,
+  "exclude_from_dashboard": true,
   "require": {
     "net": false,
     "debug": true
   },
   "i18n": {
     "title": {
-      "en": "contenthandler-template"
+      "en": "core-contenthandler_version_manager"
     },
     "summary": {
-      "en": "contenthandler-template"
+      "en": "core-contenthandler_version_manager"
     },
     "stub_content": {
       "en": "Content goes here"

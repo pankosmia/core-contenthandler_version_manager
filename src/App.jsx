@@ -24,23 +24,11 @@ function App() {
       <Grid2 size={12}>
         <h1>
           {doI18n(
-            "pages:contenthandler-template:stub_content",
+            "pages:core-contenthandler_version_manager:stub_content",
             i18nRef.current
           )}
         </h1>
       </Grid2>
-      <Chip
-        label="bouton create"
-        color="secondary"
-        variant="outlined"
-         onClick={() => navigate("createPage")}
-      />
-      <Chip
-        label="bouton update"
-        color="secondary"
-        variant="outlined"
-         onClick={() => navigate("updatePage")}
-      />
     </Grid2>
   );
 }
