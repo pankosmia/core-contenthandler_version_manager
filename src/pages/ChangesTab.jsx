@@ -20,8 +20,8 @@ import PushToDcs from './PushToDcs';
 import PullFromDownloaded from "./PullFromDownloaded";
 
 const Item = styled(Paper)(({ theme }) => ({
-    minHeight: '38vh',
-    maxHeight: '38vh',
+    minHeight: '33vh',
+    maxHeight: '33vh',
     width: '100%',
     ...theme.typography.body2,
     padding: theme.spacing(1),
@@ -191,13 +191,13 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
         }
     });
 
-    return <Box sx={{ height: "80vh" }}>
+    return <Box sx={{ height: "70vh" }}>
         <Stack
             divider={<Divider orientation="horizontal" flexItem />}
             spacing={2}
             sx={{
                 height: "100%",
-                justifyContent: "space-between",
+                justifyContent: "center",
                 alignItems: "flex-start",
             }}
         >
@@ -206,7 +206,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                     <Box sx={{ width: '100%' }}>
                         {status.length > 0
                             ?
-                            <TableContainer component={Paper} sx={{ maxHeight: { xs: 65, sm: 70, md: 120, lg: 250 } }}>
+                            <TableContainer component={Paper} sx={{ maxHeight: { sm: 70, md: 110, lg: 160, xl: 200 } }}>
                                 <Table stickyHeader sx={{ minWidth: "100%" }} size="small" aria-label="status dense table">
                                     <TableHead>
                                         <TableRow>
@@ -234,7 +234,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                             </Typography>
                         }
                     </Box>
-                    <Box>
+                    <Box sx={{ width:"100%" }}>
                         <TextField
                             id="commit-message-input"
                             fullWidth
@@ -265,7 +265,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                         {commits.length > 0
                             ?
                             <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                <TableContainer sx={{ maxHeight: { xs: 140, sm: 170, lg: 240, xl: 300 } }}>
+                                <TableContainer sx={{ maxHeight: { sm: 140, md: 170, lg: 200, xl: 250 } }}>
                                     <Table stickyHeader aria-label="commits sticky table" sx={{ tableLayout: 'fixed' }}>
                                         <TableHead>
                                             <TableRow>
