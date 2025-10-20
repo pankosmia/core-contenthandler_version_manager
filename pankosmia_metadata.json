@@ -15,6 +15,10 @@
     },
     "stub_content": {
       "en": "Content goes here"
+    },
+    "connect_remote": {
+      "en": "Connect remote",
+      "es": "Conectar remoto"
     }
   }
 }
