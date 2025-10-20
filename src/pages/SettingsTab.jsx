@@ -32,9 +32,7 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
     const [branchList, setBranchList] = useState([]);
     const [selectedBranchIndex, setSelectedBranchIndex] = useState();
     const [downloadRepoPath, setDownloadRepoPath] = useState('');
-    //const [downloadRemoteUrlValue, setDownloadRemoteUrlValue] = useState('');
     const [downloadPathTest, setDownloadPathTest] = useState('_sideloaded_');
-    //const [downloadRemotes, setDownloadRemotes] = useState([]);
 
 
     useEffect(() => {
@@ -222,9 +220,6 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
     const handleListItemClick = (event, index) => {
         setSelectedBranchIndex(index);
     };
-
-    console.log(downloadRepoPath, downloadRepoPath === "");
-    console.log(remotes, remotes.length > 0);
 
     return <Box> 
             <Stack spacing={2}>
