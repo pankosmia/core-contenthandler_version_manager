@@ -31,6 +31,8 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
     const [remotes, setRemotes] = useState([]);
     const [branchList, setBranchList] = useState([]);
     const [selectedBranchIndex, setSelectedBranchIndex] = useState();
+    const [downloadRepoPath, setDownloadRepoPath] = useState('');
+    const [downloadPathTest, setDownloadPathTest] = useState('_sideloaded_');
 
     useEffect(() => {
         const doFetch = async () => { 
@@ -51,7 +53,7 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
         }
         doFetch().then()
     },
-    [reposModCount])
+    [reposModCount]);
 
     const addRemoteRepo = async repo_path => {
 
@@ -79,7 +81,7 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
                 {variant: "error"}
             );
         }
-    }
+    };
 
     const repoBranches = async repo_path => {
 
@@ -136,6 +138,44 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
     };
 
     useEffect(() => {
+        const checkIfDownloadRepoExists = async (repo_path, downloadFolder) => { 
+            const statusUrl = `/git/status/${repo_path.split("/")[0]}/${downloadFolder}/${repo_path.split("/")[2]}`;
+            const statusResponse = await getJson(statusUrl, debugRef.current);
+            if (statusResponse.ok) {
+                setDownloadRepoPath(statusUrl.split("status/")[1])
+            } else {
+                setDownloadPathTest("_downloaded_")
+            }
+        }
+        checkIfDownloadRepoExists(repoInfo, downloadPathTest).then()
+    },
+    [downloadPathTest]);
+
+    const updateRemote = async (repo_path, download_path) => {
+
+        const addUrl = `/git/remote/add/${repo_path}?remote_name=downloaded&remote_url=${download_path}`;
+        const addResponse = await postEmptyJson(addUrl, debugRef.current);
+        if (!addResponse.ok) {
+            enqueueSnackbar(
+                doI18n("pages:content:could_not_add_remote_repo", i18nRef.current),
+                {variant: "error"}
+            );
+            return;
+        }
+        const updatesPath = `_local_/_updates_/${repo_path.split("/")[2]}`;
+        const addUrl2 = `/git/remote/add/${repo_path}?remote_name=updates&remote_url=${updatesPath}`;
+        const addResponse2 = await postEmptyJson(addUrl2, debugRef.current);
+        if (!addResponse2.ok) {
+            enqueueSnackbar(
+                doI18n("pages:content:could_not_add_remote_repo", i18nRef.current) + "2",
+                {variant: "error"}
+            );
+            return;
+        }
+        setDownloadRepoPath("");  //Makes the component update
+    };
+
+    useEffect(() => {
         if (open === true) {
             repoBranches(repoInfo).then();
         }
@@ -180,7 +220,7 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
         setSelectedBranchIndex(index);
     };
 
-    return <Box sx={{ height: "70vh" }}> 
+    return <Box sx={{ height: "70vh" }}>
             <Stack spacing={2}>
                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end"}}>
                     <TextField
@@ -270,6 +310,15 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
                         </Box>
                     </Box>
                 </Popover>
+                <Button 
+                    variant="outlined" 
+                    color='secondary' 
+                    sx={{ width: 'fit-content' }} 
+                    onClick={() => updateRemote(repoInfo, downloadRepoPath).then()}
+                    disabled={downloadRepoPath === "" || remotes.length > 0}
+                >
+                    {doI18n("pages:core-contenthandler_version_manager:connect_remote", i18nRef.current)}
+                </Button>
             </Stack>
         </Box>;
 }
