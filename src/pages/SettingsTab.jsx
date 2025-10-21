@@ -220,8 +220,8 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
         setSelectedBranchIndex(index);
     };
 
-    return <Box sx={{ height: "70vh" }}> 
 
+    return <Box> 
             <Stack spacing={2}>
                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end"}}>
                     <TextField
