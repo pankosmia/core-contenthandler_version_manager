@@ -34,7 +34,6 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
     const [downloadRepoPath, setDownloadRepoPath] = useState('');
     const [downloadPathTest, setDownloadPathTest] = useState('_sideloaded_');
 
-
     useEffect(() => {
         const doFetch = async () => { 
             const remoteListUrl = `/git/remotes/${repoInfo}`;
@@ -222,6 +221,7 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
     };
 
     return <Box sx={{ height: "70vh" }}> 
+
             <Stack spacing={2}>
                 <Box sx={{display: 'flex', flexDirection: 'row', justifyContent:"flex-end"}}>
                     <TextField
