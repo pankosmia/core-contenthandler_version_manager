@@ -84,15 +84,17 @@ function PullFromDownloaded({repoPath,repoName, open, closeFn, reposModCount, se
                         const downloadRepoUri = downloadRemote.url;
                         const downloadRepoPath = downloadRepoUri
                             .replace("file://", "")
-                            .split("/")
+                            .split(/\/|\\+/)
                             .reverse()
                             .slice(0,3)
                             .reverse()
                             .join("/");
+                        console.log(downloadRepoPath);
 
                         // Copy downloaded to updated
                         const updateRepoPath = `_local_/_updates_/${repoPath.split("/")[2]}`;
                         const copyUrl = `/git/copy/${downloadRepoPath}?target_path=${updateRepoPath}`;
+                        console.log(copyUrl);
                         const copyResponse = await postEmptyJson(copyUrl, debugRef.current);
                         if (!copyResponse.ok) {
                             enqueueSnackbar(
@@ -118,19 +120,20 @@ function PullFromDownloaded({repoPath,repoName, open, closeFn, reposModCount, se
                         // Attempt pull from editable to updated
                         // If fail, delete updated and croak
                         const pull1Url = `/git/pull-repo/editable/${updateRepoPath}`;
+                        console.log(pull1Url);
                         const pull1Response = await postEmptyJson(pull1Url, debugRef.current);
                         if (!pull1Response.ok) {
                             enqueueSnackbar(
                                 doI18n("pages:content:could_not_pull_to_update", i18nRef.current),
                                 {variant: "error"}
                             );
-                            await deleteUpdate(updateRepoPath);
+                            /* await deleteUpdate(updateRepoPath); */
                             closeFn();
                             return;
                         }
 
                         // Check for conflicts
-                        if (pull1Response["has_conflicts"]) {
+                        /* if (pull1Response["has_conflicts"]) {
                             enqueueSnackbar(
                                 doI18n("pages:content:merge conflicts", i18nRef.current),
                                 {variant: "error"}
@@ -138,7 +141,7 @@ function PullFromDownloaded({repoPath,repoName, open, closeFn, reposModCount, se
                             await deleteUpdate(updateRepoPath);
                             closeFn();
                             return;
-                        }
+                        } */
 
                         // Pull from updated to local
                         const pull2Url = `/git/pull-repo/updates/${repoPath}`;
@@ -151,7 +154,7 @@ function PullFromDownloaded({repoPath,repoName, open, closeFn, reposModCount, se
                         }
 
                         // Delete updated regardless
-                        await deleteUpdate(updateRepoPath);
+                        /* await deleteUpdate(updateRepoPath); */
 
                         // The end!
                         enqueueSnackbar(

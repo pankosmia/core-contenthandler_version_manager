@@ -32,7 +32,9 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
     const [branchList, setBranchList] = useState([]);
     const [selectedBranchIndex, setSelectedBranchIndex] = useState();
     const [downloadRepoPath, setDownloadRepoPath] = useState('');
-    const [downloadPathTest, setDownloadPathTest] = useState('_sideloaded_');
+    //const [downloadPathTest, setDownloadPathTest] = useState('_sideloaded_');
+    const [localRepos, setLocalRepos] = useState([]);
+    const [downloadedCopyExists, setDownloadedCopyExists] = useState(false);
 
     useEffect(() => {
         const doFetch = async () => { 
@@ -137,7 +139,7 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
         }
     };
 
-    useEffect(() => {
+    /* useEffect(() => {
         const checkIfDownloadRepoExists = async (repo_path, downloadFolder) => { 
             const statusUrl = `/git/status/${repo_path.split("/")[0]}/${downloadFolder}/${repo_path.split("/")[2]}`;
             const statusResponse = await getJson(statusUrl, debugRef.current);
@@ -149,11 +151,42 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
         }
         checkIfDownloadRepoExists(repoInfo, downloadPathTest).then()
     },
-    [downloadPathTest]);
+    [downloadPathTest]); */
+
+    const getLocalRepos = async () => {
+        const localReposResponse = await getJson("/git/list-local-repos", debugRef.current);
+        if (localReposResponse.ok) {
+            setLocalRepos(localReposResponse.json);
+        }
+    };
+
+    useEffect(
+        () => {
+            getLocalRepos().then();
+        },
+        [reposModCount]
+    );
+
+    useEffect(() => {
+        if (localRepos.length > 0){
+            const downloadedRepo = localRepos?.filter(l => !l.includes("local"))?.filter(l => l.includes(repoInfo?.split("/")[2]));
+            setDownloadedCopyExists(downloadedRepo.length > 0 );
+            if (downloadedRepo.length > 0){
+                setDownloadRepoPath(downloadedRepo[0])
+            }
+        }
+    }, [localRepos])
+
+    console.log( "filter", localRepos?.filter(l => !l.includes("local"))?.find(l => l.includes("en_juxta"))?.split("/")[2]/* [0]?.split("/")[2] */ );
+    console.log("repo", repoInfo?.split("/")[2]);
+    console.log("existe", downloadedCopyExists);
+    console.log(!downloadedCopyExists);
+    console.log(remotes.length > 0);
 
     const updateRemote = async (repo_path, download_path) => {
 
         const addUrl = `/git/remote/add/${repo_path}?remote_name=downloaded&remote_url=${download_path}`;
+        console.log("addUrl",addUrl);
         const addResponse = await postEmptyJson(addUrl, debugRef.current);
         if (!addResponse.ok) {
             enqueueSnackbar(
@@ -164,6 +197,7 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
         }
         const updatesPath = `_local_/_updates_/${repo_path.split("/")[2]}`;
         const addUrl2 = `/git/remote/add/${repo_path}?remote_name=updates&remote_url=${updatesPath}`;
+        console.log("addUrl2",addUrl2);
         const addResponse2 = await postEmptyJson(addUrl2, debugRef.current);
         if (!addResponse2.ok) {
             enqueueSnackbar(
@@ -315,7 +349,7 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
                     color='secondary' 
                     sx={{ width: 'fit-content' }} 
                     onClick={() => updateRemote(repoInfo, downloadRepoPath).then()}
-                    disabled={downloadRepoPath === "" || remotes.length > 0}
+                    disabled={(!downloadedCopyExists && remotes.length > 0) || downloadRepoPath === ""}
                 >
                     {doI18n("pages:core-contenthandler_version_manager:connect_remote", i18nRef.current)}
                 </Button>

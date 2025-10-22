@@ -49,8 +49,8 @@ function VersionManager() {
     const [repoPath, setRepoPath] = useState([]);
     const [open, setOpen] = useState(true);
     const [repoName, setRepoName] = useState([]);
-    const [fullWidth, setFullWidth] = useState(true);
-    const [maxWidth, setMaxWidth] = useState('lg');
+    /* const [fullWidth, setFullWidth] = useState(true);
+    const [maxWidth, setMaxWidth] = useState('lg'); */
 
     const handleTabsChange = (event, newValue) => {
         setTabValue(newValue);
@@ -107,8 +107,8 @@ function VersionManager() {
 
             />
             <Dialog
-                fullWidth={fullWidth}
-                maxWidth={maxWidth}
+                fullWidth={true}
+                maxWidth="lg"
                 open={open}
                 onClose={handleClose}
                 sx={{

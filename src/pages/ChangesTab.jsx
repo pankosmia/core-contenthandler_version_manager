@@ -1,6 +1,5 @@
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
-    Grid2,
     Button,
     Typography,
     TextField,
@@ -11,7 +10,7 @@ import {
     Tooltip,
     Dialog, DialogContent, DialogContentText, DialogActions, AppBar, Toolbar,
     Link,
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination
+    Table, TableBody, TableCell, TableContainer, TableHead, TableRow
 } from "@mui/material";
 import { styled } from '@mui/material/styles';
 import { debugContext, i18nContext, netContext, doI18n, postJson, getJson } from "pithekos-lib";
@@ -52,7 +51,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
     const [updateAnywaysAnchorEl, setUpdateAnywaysAnchorEl] = useState(null);
     const updateAnywaysOpen = Boolean(updateAnywaysAnchorEl);
 
-    const [page, setPage] = useState(0);
+   /*  const [page, setPage] = useState(0);
     const [rowsPerPage, setRowsPerPage] = useState(10);
 
     const handleChangePage = (event, newPage) => {
@@ -62,7 +61,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
     const handleChangeRowsPerPage = (event) => {
         setRowsPerPage(+event.target.value);
         setPage(0);
-    };
+    }; */
 
     const repoStatus = async (repo_path) => {
         const statusUrl = `/git/status/${repo_path}`;
