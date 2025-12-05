@@ -6,6 +6,17 @@
     "net": false,
     "debug": true
   },
+  "endpoints": {
+    "versionManager": {
+      "manager": [
+        {
+          "doc": "Use version Manager",
+          "label": "pages:content:version_manager",
+          "url": "/clients/core-contenthandler_version_manager#/versionManager/"
+        }
+      ]
+    }
+  },
   "i18n": {
     "title": {
       "en": "core-contenthandler_version_manager"
