@@ -1,18 +1,14 @@
 import { useState, useContext } from 'react';
 import {
-    AppBar,
-    Button,
-    Dialog,
-    DialogActions,
     DialogContent,
     DialogContentText,
-    Toolbar,
     Typography,
     Stack,
     TextField
 } from "@mui/material";
 import { debugContext, i18nContext, doI18n, postJson } from "pithekos-lib";
 import { enqueueSnackbar } from "notistack";
+import { PanDialog, PanDialogActions } from 'pankosmia-rcl'
 
 function PushToDcs({ repoPath,repoName, open, closeFn }) {
     const { i18nRef } = useContext(i18nContext);
@@ -43,25 +39,12 @@ function PushToDcs({ repoPath,repoName, open, closeFn }) {
             }
     };
 
-    return <Dialog
-        open={open}
-        onClose={closeFn}
-        fullWidth={true}
-        maxWidth={"lg"}
-        slotProps={{
-            paper: {
-                component: 'form',
-            },
-        }}
-    >
-        <AppBar color='secondary' sx={{ position: 'relative', borderTopLeftRadius: 4, borderTopRightRadius: 4 }}>
-            <Toolbar>
-                <Typography variant="h6" component="div">
-                    {doI18n("pages:content:push_to_dcs", i18nRef.current)}
-                </Typography>
-            </Toolbar>
-        </AppBar>
-        <DialogContent>
+    return <PanDialog
+            titleLabel={doI18n("pages:content:push_to_dcs", i18nRef.current)}
+            isOpen={open}
+            closeFn={() => closeFn()}
+        >
+           <DialogContent>
         <DialogContentText>
                 <Typography variant="h6">
                     {repoName}
@@ -90,18 +73,14 @@ function PushToDcs({ repoPath,repoName, open, closeFn }) {
                 </Stack>
             </DialogContentText>
         </DialogContent>
-        <DialogActions>
-            <Button color="warning" onClick={closeFn}>
-                {doI18n("pages:content:cancel", i18nRef.current)}
-            </Button>
-            <Button
-                variant='contained'
-                color="primary"
-                disabled={dcsUsername === "" || dcsPassword === ""}
-                onClick={() => { pushRepo(repoPath, dcsUsername, dcsPassword).then() ;closeFn() }}
-            >{doI18n("pages:content:accept", i18nRef.current)}</Button>
-        </DialogActions>
-    </Dialog>;
+            <PanDialogActions
+                actionFn={() => { pushRepo(repoPath, dcsUsername, dcsPassword).then() ;closeFn() }}
+                actionLabel={doI18n("pages:content:accept", i18nRef.current)}
+                closeFn={() => closeFn()}
+                closeLabel={doI18n("pages:content:cancel", i18nRef.current)}
+                isDisabled={dcsUsername === "" || dcsPassword === ""}
+            />
+        </PanDialog>
 }
 
 export default PushToDcs;

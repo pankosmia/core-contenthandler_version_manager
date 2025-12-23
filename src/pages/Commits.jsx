@@ -1,17 +1,13 @@
 import { useState, useContext, useEffect } from 'react';
 import {
-    AppBar,
-    Button,
-    Dialog,
-    DialogActions,
     DialogContent,
     DialogContentText,
-    Toolbar,
     Typography
 } from "@mui/material";
-import {DataGrid} from '@mui/x-data-grid';
+import { DataGrid } from '@mui/x-data-grid';
 import { debugContext, i18nContext, doI18n, getJson } from "pithekos-lib";
 import { enqueueSnackbar } from "notistack";
+import { PanDialog, PanDialogActions } from 'pankosmia-rcl'
 
 function Commits({ repoInfo, open, closeFn }) {
     const { i18nRef } = useContext(i18nContext);
@@ -53,7 +49,7 @@ function Commits({ repoInfo, open, closeFn }) {
             repoCommits(repoInfo.path).then();
         }
     },
-    [open]);
+        [open]);
 
     const statusColumns = [
         {
@@ -111,31 +107,18 @@ function Commits({ repoInfo, open, closeFn }) {
         }
     });
 
-    return <Dialog
-        open={open}
-        onClose={closeFn}
-        fullWidth={true}
-        maxWidth={"lg"}
-        slotProps={{
-            paper: {
-                component: 'form',
-            },
-        }}
+    return <PanDialog
+        titleLabel={doI18n("pages:content:commits", i18nRef.current)}
+        isOpen={open}
+        closeFn={() => closeFn()}
     >
-        <AppBar color='secondary' sx={{ position: 'relative', borderTopLeftRadius: 4, borderTopRightRadius: 4 }}>
-            <Toolbar>
-                <Typography variant="h6" component="div">
-                    {doI18n("pages:content:commits", i18nRef.current)}
-                </Typography>
-            </Toolbar>
-        </AppBar>
         <DialogContent>
             <DialogContentText>
                 <Typography variant="h6">
                     {repoInfo.name}
                 </Typography>
             </DialogContentText>
-            {status.length > 0 
+            {status.length > 0
                 ?
                 <DataGrid
                     initialState={{
@@ -145,14 +128,14 @@ function Commits({ repoInfo, open, closeFn }) {
                     }}
                     rows={statusRows}
                     columns={statusColumns}
-                    sx={{fontSize: "1rem"}}
+                    sx={{ fontSize: "1rem" }}
                 />
                 :
                 <Typography variant="h6">
                     {doI18n("pages:content:no_changes", i18nRef.current)}
                 </Typography>
             }
-            {commits.length > 0 
+            {commits.length > 0
                 ?
                 <>
                     <DialogContentText>
@@ -166,7 +149,7 @@ function Commits({ repoInfo, open, closeFn }) {
                         }}
                         rows={commitsRows}
                         columns={commitsColumns}
-                        sx={{fontSize: "1rem"}}
+                        sx={{ fontSize: "1rem" }}
                     />
                 </>
                 :
@@ -175,17 +158,13 @@ function Commits({ repoInfo, open, closeFn }) {
                 </Typography>
             }
         </DialogContent>
-        <DialogActions>
-            <Button color="warning" onClick={closeFn}>
-                {doI18n("pages:content:cancel", i18nRef.current)}
-            </Button>
-            <Button
-                variant='contained'
-                color="primary"
-                onClick={closeFn}
-            >{doI18n("pages:content:accept", i18nRef.current)}</Button>
-        </DialogActions>
-    </Dialog>;
+        <PanDialogActions
+            actionFn={closeFn()}
+            actionLabel={doI18n("pages:content:accept", i18nRef.current)}
+            closeFn={() => closeFn()}
+            closeLabel={doI18n("pages:content:cancel", i18nRef.current)}
+        />
+    </PanDialog>
 }
 
 export default Commits;

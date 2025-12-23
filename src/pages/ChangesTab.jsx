@@ -1,6 +1,5 @@
 import { useState, useContext, useEffect, useRef } from 'react';
 import {
-    Grid2,
     Button,
     Typography,
     TextField,
@@ -9,7 +8,7 @@ import {
     Paper,
     Divider,
     Tooltip,
-    Dialog, DialogContent, DialogContentText, DialogActions, AppBar, Toolbar,
+    DialogContent, DialogContentText,
     Link,
     Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination
 } from "@mui/material";
@@ -18,6 +17,7 @@ import { debugContext, i18nContext, netContext, doI18n, postJson, getJson } from
 import { enqueueSnackbar } from "notistack";
 import PushToDcs from './PushToDcs';
 import PullFromDownloaded from "./PullFromDownloaded";
+import { PanDialog, PanDialogActions } from 'pankosmia-rcl'
 
 const Item = styled(Paper)(({ theme }) => ({
     minHeight: '33vh',
@@ -361,41 +361,26 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
             open={pullOpen}
             closeFn={() => setPullAnchorEl(null)}
         />
-        <Dialog
-            open={updateAnywaysOpen}
-            onClose={() => setUpdateAnywaysAnchorEl(null)}
-            maxWidth={"lg"}
-            slotProps={{
-                paper: {
-                    component: 'form',
-                },
-            }}
-        >
-            <AppBar color='secondary' sx={{ position: 'relative', borderTopLeftRadius: 4, borderTopRightRadius: 4 }}>
-                <Toolbar>
-                    <Typography variant="h6" component="div">
-                        {doI18n("pages:content:update_without_latest_changes", i18nRef.current)}
-                    </Typography>
-                </Toolbar>
-            </AppBar>
-            <DialogContent>
+        
+        <PanDialog
+                titleLabel={doI18n("pages:content:update_without_latest_changes", i18nRef.current)}
+                isOpen={open}
+                closeFn={() => setUpdateAnywaysAnchorEl(null)}
+            >
+                <DialogContent>
                 <DialogContentText>
                     <Typography variant="body1">
                         {doI18n("pages:content:uncommitted_changes", i18nRef.current)}
                     </Typography>
                 </DialogContentText>
             </DialogContent>
-            <DialogActions>
-                <Button color="warning" onClick={() => setUpdateAnywaysAnchorEl(null)}>
-                    {doI18n("pages:content:cancel", i18nRef.current)}
-                </Button>
-                <Button
-                    variant='contained'
-                    color="primary"
-                    onClick={(event) => setPushAnchorEl(event.currentTarget)}
-                >{doI18n("pages:content:update_anyways", i18nRef.current)}</Button>
-            </DialogActions>
-        </Dialog>
+                <PanDialogActions
+                    actionFn={(event) => setPushAnchorEl(event.currentTarget)}
+                    actionLabel={doI18n("pages:content:update_anyways", i18nRef.current)}
+                    closeFn={() => setUpdateAnywaysAnchorEl(null)}
+                    closeLabel={doI18n("pages:content:cancel", i18nRef.current)}
+                />
+            </PanDialog>
     </Box>;
 }
 

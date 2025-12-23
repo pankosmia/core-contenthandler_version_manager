@@ -1,16 +1,12 @@
 import {useContext} from 'react';
 import {
-    AppBar,
-    Button,
-    Dialog,
-    DialogActions,
     DialogContent,
     DialogContentText,
-    Toolbar,
     Typography
 } from "@mui/material";
 import {debugContext, i18nContext, doI18n, postEmptyJson, getJson} from "pithekos-lib";
 import {enqueueSnackbar} from "notistack";
+import {PanDialog,PanDialogActions} from "pankosmia-rcl";
 
 function PullFromDownloaded({repoPath,repoName, open, closeFn, reposModCount, setReposModCount}) {
     const {i18nRef} = useContext(i18nContext);
@@ -27,39 +23,20 @@ function PullFromDownloaded({repoPath,repoName, open, closeFn, reposModCount, se
         }
     }
 
-    return <Dialog
-        open={open}
-        onClose={closeFn}
-        fullWidth={true}
-        maxWidth={"lg"}
-        slotProps={{
-            paper: {
-                component: 'form',
-            },
-        }}
-    >
-        <AppBar color='secondary' sx={{position: 'relative', borderTopLeftRadius: 4, borderTopRightRadius: 4}}>
-            <Toolbar>
-                <Typography variant="h6" component="div">
-                    {doI18n("pages:content:pull_from_downloaded", i18nRef.current)}
-                </Typography>
-            </Toolbar>
-        </AppBar>
-        <DialogContent>
+    return <PanDialog
+            titleLabel=  {doI18n("pages:content:pull_from_downloaded", i18nRef.current)}
+            isOpen={open}
+            closeFn={() => closeFn()}
+        >
+            <DialogContent>
             <DialogContentText>
                 <Typography variant="h6">
                     {repoName}
                 </Typography>
             </DialogContentText>
         </DialogContent>
-        <DialogActions>
-            <Button color="warning" onClick={closeFn}>
-                {doI18n("pages:content:cancel", i18nRef.current)}
-            </Button>
-            <Button
-                variant='contained'
-                color="primary"
-                onClick={
+            <PanDialogActions
+                actionFn={
                     async () => {
                         // Get downloaded from the remotes for local
                         const remoteListUrl = `/git/remotes/${repoPath}`;
@@ -161,9 +138,11 @@ function PullFromDownloaded({repoPath,repoName, open, closeFn, reposModCount, se
                         closeFn();
                     }
                 }
-            >{doI18n("pages:content:accept", i18nRef.current)}</Button>
-        </DialogActions>
-    </Dialog>;
+                actionLabel={doI18n("pages:content:accept", i18nRef.current)}
+                closeFn={() => closeFn()}
+                closeLabel={doI18n("pages:content:cancel", i18nRef.current)}
+            />
+        </PanDialog>
 }
 
 export default PullFromDownloaded;
