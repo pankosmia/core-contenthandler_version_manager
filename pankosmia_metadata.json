@@ -2,6 +2,7 @@
   "id": "core-contenthandler_version_manager",
   "exclude_from_menu": true,
   "exclude_from_dashboard": true,
+  "minServerVersion":"0.12.13",
   "require": {
     "net": false,
     "debug": true
@@ -12,7 +13,7 @@
         {
           "doc": "Use version Manager",
           "label": "pages:content:version_manager",
-          "url": "/clients/core-contenthandler_version_manager#/versionManager/"
+          "url": "/versionManager/"
         }
       ]
     }
