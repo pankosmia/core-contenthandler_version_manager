@@ -16,5 +16,5 @@ export default defineConfig({
     emptyOutDir: true,
     
   },
-  base: '/clients/core-contenthandler_version_manager/'
+  base: '/clients/core-contenthandler_version_manager'
 })
