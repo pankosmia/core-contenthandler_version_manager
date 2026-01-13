@@ -2,7 +2,7 @@
   "id": "core-contenthandler_version_manager",
   "exclude_from_menu": true,
   "exclude_from_dashboard": true,
-  "minServerVersion":"0.12.13",
+  "minServerVersion":"0.12.14",
   "require": {
     "net": false,
     "debug": true
