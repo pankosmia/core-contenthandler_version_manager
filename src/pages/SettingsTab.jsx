@@ -14,8 +14,9 @@ import {
 } from "@mui/material";
 import DoneIcon from '@mui/icons-material/Done';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import {debugContext, i18nContext, doI18n, postEmptyJson, getJson} from "pithekos-lib";
+import { doI18n, postEmptyJson, getJson} from "pithekos-lib";
 import {enqueueSnackbar} from "notistack";
+import { debugContext, i18nContext } from "pankosmia-rcl";
 
 function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteUrlExists}) {
     const {i18nRef} = useContext(i18nContext);

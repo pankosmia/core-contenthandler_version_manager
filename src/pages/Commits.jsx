@@ -10,8 +10,9 @@ import {
     Typography
 } from "@mui/material";
 import {DataGrid} from '@mui/x-data-grid';
-import { debugContext, i18nContext, doI18n, getJson } from "pithekos-lib";
+import { doI18n, getJson } from "pithekos-lib";
 import { enqueueSnackbar } from "notistack";
+import {  debugContext, i18nContext } from "pankosmia-rcl";
 
 function Commits({ repoInfo, open, closeFn }) {
     const { i18nRef } = useContext(i18nContext);

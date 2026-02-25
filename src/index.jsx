@@ -1,5 +1,5 @@
 import {createRoot} from "react-dom/client";
-import {SpaContainer} from "pithekos-lib";
+import {SpaContainer} from "pankosmia-rcl";
 import {createHashRouter, RouterProvider} from "react-router-dom";
 import './index.css';
 import VersionManager from "./pages/VersionManager";
@@ -7,13 +7,13 @@ import App from "./App";
 
 const router = createHashRouter([
     {
-        path:"/",
+        path:"version_manager",
         element:<App/>
     },
-    {
-        path: "version_manager",
-        element:<VersionManager/> 
-    }
+    // {
+    //     path: "",
+    //     element:<VersionManager/> 
+    // }
 ]);
 
 createRoot(document.getElementById("root"))

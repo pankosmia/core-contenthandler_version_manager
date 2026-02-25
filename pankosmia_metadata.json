@@ -2,10 +2,24 @@
   "id": "core-contenthandler_version_manager",
   "exclude_from_menu": true,
   "exclude_from_dashboard": true,
+  "minServerVersion": "0.14.1",
   "require": {
     "net": false,
     "debug": true
   },
+  "endpoints": {
+    "version_manager": {
+      "manager": [
+        {
+          "doc": "version manager",
+          "placeHolders": {},
+          "label": "",
+          "url": "version_manager"
+        }
+      ]
+    }
+  },
+
   "i18n": {
     "title": {
       "en": "core-contenthandler_version_manager"

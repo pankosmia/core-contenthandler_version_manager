@@ -11,8 +11,9 @@ import {
     Stack,
     TextField
 } from "@mui/material";
-import { debugContext, i18nContext, doI18n, postJson } from "pithekos-lib";
+import {  doI18n, postJson } from "pithekos-lib";
 import { enqueueSnackbar } from "notistack";
+import { debugContext, i18nContext } from "pankosmia-rcl";
 
 function PushToDcs({ repoPath,repoName, open, closeFn }) {
     const { i18nRef } = useContext(i18nContext);
