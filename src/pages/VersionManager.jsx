@@ -6,13 +6,14 @@ import {
     Typography,
     Dialog,
     DialogActions,
-    Button
+    Button,
+    DialogContent
 } from "@mui/material";
 import PropTypes from 'prop-types';
 import { debugContext, i18nContext, doI18n, getJson, Header } from "pithekos-lib";
 import ChangesTab from './ChangesTab';
 import SettingsTab from './SettingsTab';
-
+import { PanDialog, PanDialogActions } from "pankosmia-rcl";
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -57,7 +58,7 @@ function VersionManager() {
     };
 
     const handleClose = () => {
-       setOpen(false);
+        setOpen(false);
         setTimeout(() => {
             window.location.href = '/clients/content';
         }, 300);
@@ -106,57 +107,47 @@ function VersionManager() {
                 requireNet={false}
 
             />
-            <Dialog
-                fullWidth={fullWidth}
-                maxWidth={maxWidth}
-                open={open}
-                onClose={handleClose}
-                sx={{
-                    backdropFilter:"blur(3px)"
-                }}
+            <PanDialog
+                titleLabel={`${doI18n("pages:content:version_manager", i18nRef.current)} - ${repoName}`}
+                isOpen={open}
+                closeFn={() => handleClose()}
             >
-                <Box sx={{padding:1}}>
-                    <Typography variant="h6" component="div" fontWeight="bold">{doI18n("pages:content:version_manager", i18nRef.current)}</Typography>
-                    <Typography variant="subtitle1" component="div" fontWeight="bold"> {repoName} </Typography>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Tabs
-                            value={tabValue}
-                            //variant="fullWidth"
-                            onChange={handleTabsChange}
-                            aria-label="version manager tabs"
+                <DialogContent>
+                        <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+                            <Tabs
+                                value={tabValue}
+                                //variant="fullWidth"
+                                onChange={handleTabsChange}
+                                aria-label="version manager tabs"
                             //centered
-                        >
-                            <Tab label={doI18n("pages:content:changes_tab", i18nRef.current)} {...a11yProps(0)} />
-                            <Tab label={doI18n("pages:content:settings_tab", i18nRef.current)} {...a11yProps(1)} />
-                        </Tabs>
-                    </Box>
-                    <CustomTabPanel value={tabValue} index={0}>
-                        <ChangesTab
-                            repoPath={repoPath}
-                            repoName={repoName}
-                            open={tabValue === 0}
-                            setTabValue={setTabValue}
-                            setRemoteUrlExists={setRemoteUrlExists}
-                        />
-                    </CustomTabPanel>
-                    <CustomTabPanel value={tabValue} index={1}>
-                        <SettingsTab
-                            repoInfo={repoPath}
-                            open={tabValue === 1}
-                            remoteUrlExists={remoteUrlExists}
-                            setRemoteUrlExists={setRemoteUrlExists}
-                        />
-                    </CustomTabPanel>
-                </Box>
-                 <DialogActions>
-                    <Button
-                        onClick={handleClose}
-                        color='primary'
-                    >
-                        {doI18n("pages:content:close", i18nRef.current)}
-                    </Button>
-                </DialogActions>
-            </Dialog>
+                            >
+                                <Tab label={doI18n("pages:content:changes_tab", i18nRef.current)} {...a11yProps(0)} />
+                                <Tab label={doI18n("pages:content:settings_tab", i18nRef.current)} {...a11yProps(1)} />
+                            </Tabs>
+                        </Box>
+                        <CustomTabPanel value={tabValue} index={0}>
+                            <ChangesTab
+                                repoPath={repoPath}
+                                repoName={repoName}
+                                open={tabValue === 0}
+                                setTabValue={setTabValue}
+                                setRemoteUrlExists={setRemoteUrlExists}
+                            />
+                        </CustomTabPanel>
+                        <CustomTabPanel value={tabValue} index={1}>
+                            <SettingsTab
+                                repoInfo={repoPath}
+                                open={tabValue === 1}
+                                remoteUrlExists={remoteUrlExists}
+                                setRemoteUrlExists={setRemoteUrlExists}
+                            />
+                        </CustomTabPanel>
+                </DialogContent>
+                <PanDialogActions
+                closeFn={()=>handleClose()} 
+                closeLabel=  {doI18n("pages:content:close", i18nRef.current)}
+                />
+            </PanDialog>
         </Box>
     );
 }

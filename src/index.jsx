@@ -11,7 +11,7 @@ const router = createHashRouter([
         element:<App/>
     },
     {
-        path: "version_manager",
+        path: "versionManager",
         element:<VersionManager/> 
     }
 ]);
