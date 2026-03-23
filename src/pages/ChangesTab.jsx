@@ -44,6 +44,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
     const [remoteUrlValue, setRemoteUrlValue] = useState('');
     const [commitMessageValue, setCommitMessageValue] = useState('');
 
+    console.log("messageCommit",commitMessageValue)
     const [pushAnchorEl, setPushAnchorEl] = useState(null);
     const pushOpen = Boolean(pushAnchorEl);
     const [pullAnchorEl, setPullAnchorEl] = useState(null);

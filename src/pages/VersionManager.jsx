@@ -48,8 +48,8 @@ function VersionManager() {
     const [repoName, setRepoName] = useState([]);
     const hash = window.location.hash;
     const query = hash.includes('?') ? hash.split('?'): '';
-    const params = new URLSearchParams(query[2]);
-    const typePageQuery = new URLSearchParams(query[1]);
+    const params = new URLSearchParams(query[1]);
+    const typePageQuery = new URLSearchParams(query[2]);
     const returnType = typePageQuery.get("returnTypePage");
 
     const path = params.get('repoPath');
