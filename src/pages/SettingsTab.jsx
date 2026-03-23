@@ -14,7 +14,8 @@ import {
 } from "@mui/material";
 import DoneIcon from '@mui/icons-material/Done';
 import AddCircleOutlineIcon from '@mui/icons-material/AddCircleOutline';
-import {debugContext, i18nContext, doI18n, postEmptyJson, getJson} from "pithekos-lib";
+import {doI18n, postEmptyJson, getJson} from "pithekos-lib";
+import {debugContext, i18nContext} from "pankosmia-rcl";
 import {enqueueSnackbar} from "notistack";
 
 function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteUrlExists}) {

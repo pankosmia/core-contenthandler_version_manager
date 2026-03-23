@@ -9,7 +9,8 @@ import {
     Toolbar,
     Typography
 } from "@mui/material";
-import {debugContext, i18nContext, doI18n, postEmptyJson, getJson} from "pithekos-lib";
+import {doI18n, postEmptyJson, getJson} from "pithekos-lib";
+import {debugContext, i18nContext} from "pankosmia-rcl";
 import {enqueueSnackbar} from "notistack";
 
 function PullFromDownloaded({repoPath,repoName, open, closeFn, reposModCount, setReposModCount}) {
