@@ -32,7 +32,7 @@ function SettingsTab({repoInfo, open, reposModCount, remoteUrlExists, setRemoteU
     const [remotes, setRemotes] = useState([]);
     const [branchList, setBranchList] = useState([]);
     const [selectedBranchIndex, setSelectedBranchIndex] = useState();
-
+    
     useEffect(() => {
         const doFetch = async () => { 
             const remoteListUrl = `/git/remotes/${repoInfo}`;

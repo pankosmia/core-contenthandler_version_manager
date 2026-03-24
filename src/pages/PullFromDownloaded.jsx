@@ -42,7 +42,7 @@ function PullFromDownloaded({repoPath,repoName, open, closeFn, reposModCount, se
         <AppBar color='secondary' sx={{position: 'relative', borderTopLeftRadius: 4, borderTopRightRadius: 4}}>
             <Toolbar>
                 <Typography variant="h6" component="div">
-                    {doI18n("pages:content:pull_from_downloaded", i18nRef.current)}
+                    {doI18n("pages:content:pull_from_downloaded", i18nRef.current)} ici
                 </Typography>
             </Toolbar>
         </AppBar>

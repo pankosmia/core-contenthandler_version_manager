@@ -44,7 +44,6 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
     const [remoteUrlValue, setRemoteUrlValue] = useState('');
     const [commitMessageValue, setCommitMessageValue] = useState('');
 
-    console.log("messageCommit",commitMessageValue)
     const [pushAnchorEl, setPushAnchorEl] = useState(null);
     const pushOpen = Boolean(pushAnchorEl);
     const [pullAnchorEl, setPullAnchorEl] = useState(null);
@@ -192,6 +191,10 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
         }
     });
 
+    const branches = remotes.map(b => b.name);
+    const syncBranches = branches.includes("downloaded") && branches.includes("updates");
+    const originBranch = remotes.map(b => b.name).filter(name => name.includes("origin"));
+
     return <Box sx={{ height: "70vh" }}>
         <Stack
             divider={<Divider orientation="horizontal" flexItem />}
@@ -324,7 +327,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                                     color='secondary'
                                     disabled={!enabledRef.current || remotes.length === 0 || !remoteUrlValue.startsWith("https://")}
                                     onClick={(event) => {
-                                        if (status.length > 0) {
+                                        if (status.length > 0 || !originBranch) {
                                             setUpdateAnywaysAnchorEl(event.currentTarget)
                                         } else {
                                             setPushAnchorEl(event.currentTarget)
@@ -341,9 +344,9 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                             onClick={(event) => {
                                 setPullAnchorEl(event.currentTarget)
                             }}
-                            disabled={status.length > 0}
+                            disabled={status.length > 0 || !syncBranches}
                         >
-                            {doI18n("pages:content:pull_from_downloaded", i18nRef.current)}
+                            {doI18n("pages:content:pull_from_downloaded", i18nRef.current)} 
                         </Button>
                     </Box>
                 </Stack>
