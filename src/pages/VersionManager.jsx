@@ -150,6 +150,7 @@ function VersionManager() {
                 <PanDialogActions
                     closeFn={() => handleClose()}
                     closeLabel={doI18n("pages:content:close", i18nRef.current)}
+                    onlyCloseButton={true}
                 />
             </PanDialog>
         </Box>

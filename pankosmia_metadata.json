@@ -27,6 +27,26 @@
     },
     "stub_content": {
       "en": "Content goes here"
+    },
+    "synchronisation":{
+      "en":"Synchronization",
+      "fr":"Synchroniser"
+    },
+    "sync-repo":{
+      "en":"Cannot sync: configure download in the settings tab",
+      "fr":""
+    },
+     "operation_requires_internet": {
+      "en": "Cannot upload to door43: an internet connection is required to continue (currently offline)",
+      "es": "@Se requiere una conexión a internet para continuar (actualmente está desconectado)",
+      "id": "@Koneksi internet diperlukan untuk melanjutkan (saat ini terputus)",
+      "fr": "@Il faut se connecter à internet pour poursuivre (actuellement hors-ligne)"
+    },
+     "update_remote": {
+      "en": "Share to door43",
+      "es": "@Compartir",
+      "fr": "Téléverser sur Door43",
+      "id": "@Perbarui remote"
     }
   }
 }
