@@ -188,7 +188,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                 justifyContent: "center",
                 alignItems: "center",
             }}
-            columnSpacing={0.5}
+            columnSpacing={1}
             rowSpacing={1}
             gap={5}
         >
@@ -201,9 +201,9 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                         rows={statusRows}
                     />
                     :
-                    <Typography variant="body1">
+                    <Button disabled  fullWidth variant="outlined">
                         {doI18n("pages:content:no_changes", i18nRef.current)}
-                    </Typography>
+                    </Button>
                 }
                 <Grid2 />
                 <Grid2 container sx={{
@@ -250,6 +250,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
             >
                 <Grid2 item size="grow">
                     <Button
+                        fullWidth
                         id="demo-customized-button"
                         aria-controls={open ? 'demo-customized-menu' : undefined}
                         aria-haspopup="true"
@@ -280,7 +281,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                     }
                 </Grid2>
 
-                <Grid2 item size={{ "@xs": 2, "@md": 1 }} sx={{ alignSelf: "center" }}>
+                <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
                     {/* Button configure settings */}
                     {/* {
                             remotes.length === 0 &&
@@ -314,7 +315,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                             </IconButton>
                         </span>
                     </Tooltip>
-                    <Tooltip title={!syncBranches ? doI18n("pages:core-contenthandler_version_manager:sync-repo", i18nRef.current) :doI18n("pages:core-contenthandler_version_manager:synchronisation", i18nRef.current)}>
+                    <Tooltip title={!syncBranches ? doI18n("pages:core-contenthandler_version_manager:sync_repo", i18nRef.current) :doI18n("pages:core-contenthandler_version_manager:synchronisation", i18nRef.current)}>
                         <span>
                             <IconButton
                                 fullWidth

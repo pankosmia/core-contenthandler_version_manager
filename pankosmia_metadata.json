@@ -32,9 +32,9 @@
       "en":"Synchronization",
       "fr":"Synchroniser"
     },
-    "sync-repo":{
+    "sync_repo":{
       "en":"Cannot sync: configure download in the settings tab",
-      "fr":""
+      "fr":"Synchronisation impossible : configurer le téléchargement dans paramètre"
     },
      "operation_requires_internet": {
       "en": "Cannot upload to door43: an internet connection is required to continue (currently offline)",
