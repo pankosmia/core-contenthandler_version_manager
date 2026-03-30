@@ -1,5 +1,6 @@
 import { useContext } from 'react';
 import {
+    Button,
     DialogContent,
     DialogContentText,
     Typography
@@ -23,7 +24,7 @@ function PullFromDownloaded({ repoPath, repoName, open, closeFn, reposModCount, 
         }
     }
 
-    const mergeFromDonwloaded = async () => {
+    const mergeFromDownloaded = async () => {
         // Get downloaded from the remotes for local
         const remoteListUrl = `/git/remotes/${repoPath}`;
         const remoteList = await getJson(remoteListUrl, debugRef.current);
@@ -139,7 +140,7 @@ function PullFromDownloaded({ repoPath, repoName, open, closeFn, reposModCount, 
             </DialogContentText>
         </DialogContent>
         <PanDialogActions
-            actionFn={mergeFromDonwloaded}
+            actionFn={mergeFromDownloaded}
             actionLabel={doI18n("pages:core-contenthandler_version_manager:synchronisation", i18nRef.current)}
             closeFn={closeFn}
             closeLabel={doI18n("pages:content:cancel", i18nRef.current)}

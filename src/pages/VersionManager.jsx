@@ -9,7 +9,7 @@ import PropTypes from 'prop-types';
 import { doI18n, getJson } from "pithekos-lib";
 import ChangesTab from './ChangesTab';
 import SettingsTab from './SettingsTab';
-import { PanDialog, PanDialogActions, debugContext, i18nContext,Header } from "pankosmia-rcl";
+import { PanDialog, PanDialogActions, debugContext, i18nContext, Header } from "pankosmia-rcl";
 function CustomTabPanel(props) {
     const { children, value, index, ...other } = props;
     return (
@@ -47,7 +47,7 @@ function VersionManager() {
     const [open, setOpen] = useState(true);
     const [repoName, setRepoName] = useState([]);
     const hash = window.location.hash;
-    const query = hash.includes('?') ? hash.split('?'): '';
+    const query = hash.includes('?') ? hash.split('?') : '';
     const params = new URLSearchParams(query[1]);
     const typePageQuery = new URLSearchParams(query[2]);
     const returnType = typePageQuery.get("returnTypePage");
@@ -58,7 +58,7 @@ function VersionManager() {
         setTabValue(newValue);
     };
 
-     const handleClose = () => {
+    const handleClose = () => {
         setOpen(false);
         if (returnType === "dashboard") {
             setTimeout(() => {
@@ -67,7 +67,7 @@ function VersionManager() {
         } else {
             setTimeout(() => {
                 window.location.href = '/clients/content';
-            },300);
+            }, 300);
         }
     };
     const getProjectSummaries = async () => {
