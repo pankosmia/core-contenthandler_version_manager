@@ -109,12 +109,13 @@ function VersionManager() {
                 titleKey={returnType === "dashboard" ? "pages:core-dashboard:title" : "pages:content:title"}
                 currentId="content"
                 requireNet={false}
-
+                showInternetSwitch={false}
             />
             <PanDialog
                 titleLabel={`${doI18n("pages:content:version_manager", i18nRef.current)} - ${repoName}`}
                 isOpen={open}
                 closeFn={() => handleClose()}
+                showInternetSwitch={true}
             >
                 <DialogContent>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
