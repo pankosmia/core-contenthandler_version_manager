@@ -1,36 +1,24 @@
-import { useState, useContext, useEffect, useRef } from 'react';
+import { useState, useContext, useEffect } from 'react';
 import {
-    Grid2,
     Button,
     Typography,
     TextField,
     Box,
-    Stack,
-    Paper,
-    Divider,
     Tooltip,
-    Dialog, DialogContent, DialogContentText, DialogActions, AppBar, Toolbar,
-    Link,
-    Table, TableBody, TableCell, TableContainer, TableHead, TableRow, TablePagination
+    DialogContent,
+    DialogContentText,
+    IconButton,
+    Menu,
+    Grid2
 } from "@mui/material";
-import { styled } from '@mui/material/styles';
-import { debugContext, i18nContext, netContext, doI18n, postJson, getJson } from "pithekos-lib";
+import { doI18n, postJson, getJson } from "pithekos-lib";
+import { debugContext, i18nContext, netContext, PanTable, PanDialog, PanDialogActions } from "pankosmia-rcl";
 import { enqueueSnackbar } from "notistack";
 import PushToDcs from './PushToDcs';
 import PullFromDownloaded from "./PullFromDownloaded";
-
-const Item = styled(Paper)(({ theme }) => ({
-    minHeight: '33vh',
-    maxHeight: '33vh',
-    width: '100%',
-    ...theme.typography.body2,
-    padding: theme.spacing(1),
-    textAlign: 'center',
-    color: (theme.vars ?? theme).palette.text.secondary,
-    ...theme.applyStyles('dark', {
-        backgroundColor: '#1A2027',
-    }),
-}));
+import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
+import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
+import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
 
 function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists }) {
 
@@ -40,6 +28,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
 
     const [status, setStatus] = useState([]);
     const [commits, setCommits] = useState([]);
+
     const [remotes, setRemotes] = useState([]);
     const [remoteUrlValue, setRemoteUrlValue] = useState('');
     const [commitMessageValue, setCommitMessageValue] = useState('');
@@ -52,16 +41,11 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
     const [updateAnywaysAnchorEl, setUpdateAnywaysAnchorEl] = useState(null);
     const updateAnywaysOpen = Boolean(updateAnywaysAnchorEl);
 
-    const [page, setPage] = useState(0);
-    const [rowsPerPage, setRowsPerPage] = useState(10);
+    const [anchorEl, setAnchorEl] = useState(null);
+    const openCommit = Boolean(anchorEl);
 
-    const handleChangePage = (event, newPage) => {
-        setPage(newPage);
-    };
-
-    const handleChangeRowsPerPage = (event) => {
-        setRowsPerPage(+event.target.value);
-        setPage(0);
+    const handleClick = (event) => {
+        setAnchorEl(event.currentTarget);
     };
 
     const repoStatus = async (repo_path) => {
@@ -191,50 +175,45 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
         }
     });
 
-    return <Box sx={{ height: "70vh" }}>
-        <Stack
-            divider={<Divider orientation="horizontal" flexItem />}
-            spacing={2}
+    const branches = remotes.map(b => b.name);
+    const syncBranches = branches.includes("downloaded") && branches.includes("updates");
+    const originBranch = remotes.map(b => b.name).filter(name => name.includes("origin"));
+
+    return <Box>
+        <Grid2
+            container
+            direction="row"
             sx={{
-                height: "100%",
+                display: "flex",
                 justifyContent: "center",
-                alignItems: "flex-start",
+                alignItems: "center",
             }}
+            columnSpacing={1}
+            rowSpacing={1}
+            gap={5}
         >
-            <Item>
-                <Stack direction="column" spacing={0} sx={{ height: "100%", alignItems: "flex-start", justifyContent: "space-between" }}>
-                    <Box sx={{ width: '100%' }}>
-                        {status.length > 0
-                            ?
-                            <TableContainer component={Paper} sx={{ maxHeight: { sm: 70, md: 110, lg: 160, xl: 200 } }}>
-                                <Table stickyHeader sx={{ minWidth: "100%" }} size="small" aria-label="status dense table">
-                                    <TableHead>
-                                        <TableRow>
-                                            {statusColumns.map((s, n) => {
-                                                return <TableCell align="left">{s.headerName}</TableCell>
-                                            })}
-                                        </TableRow>
-                                    </TableHead>
-                                    <TableBody>
-                                        {statusRows.map((row) => (
-                                            <TableRow
-                                                key={row.status}
-                                                sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                            >
-                                                <TableCell component="th" scope="row">{row.status}</TableCell>
-                                                <TableCell align="left">{row.path}</TableCell>
-                                            </TableRow>
-                                        ))}
-                                    </TableBody>
-                                </Table>
-                            </TableContainer>
-                            :
-                            <Typography variant="h6">
-                                {doI18n("pages:content:no_changes", i18nRef.current)}
-                            </Typography>
-                        }
-                    </Box>
-                    <Box sx={{ width:"100%" }}>
+            <Grid2 item size={12}>
+                <Typography variant='caption'> {doI18n("pages:core-contenthandler_version_manager:commit_helper_text", i18nRef.current)} </Typography>
+                {status.length > 0
+                    ?
+                    <PanTable
+                        columns={statusColumns}
+                        rows={statusRows}
+                    />
+                    :
+                    <Button disabled  fullWidth variant="outlined">
+                        {doI18n("pages:content:no_changes", i18nRef.current)}
+                    </Button>
+                }
+                <Grid2 />
+                <Grid2 container sx={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                }}
+                    item
+                    size={12}>
+                    <Grid2 item size="grow">
                         <TextField
                             id="commit-message-input"
                             fullWidth
@@ -244,10 +223,11 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                             onChange={(e) => setCommitMessageValue(e.target.value)}
                             required={true}
                             disabled={status.length === 0}
-                            helperText={doI18n("pages:content:commit_helper_text", i18nRef.current)}
                             size={window.innerHeight <= 600 ? "small" : "medium"}
                             sx={{ mt: 1 }}
                         />
+                    </Grid2>
+                    <Grid2 item size={{ "@xs": 2, "@md": 1 }} sx={{ alignSelf: "center" }}>
                         <Button
                             fullWidth
                             color="secondary"
@@ -256,53 +236,54 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                         >
                             {doI18n("pages:content:accept", i18nRef.current)}
                         </Button>
-                    </Box>
-                </Stack>
-            </Item>
-            <Item>
-                <Stack direction="column" spacing={2} sx={{ height: "100%", alignItems: "flex-start", justifyContent: "space-between" }}>
-                    <Box sx={{ width: '100%' }}>
-                        {commits.length > 0
-                            ?
-                            <Paper sx={{ width: '100%', overflow: 'hidden' }}>
-                                <TableContainer sx={{ maxHeight: { sm: 140, md: 170, lg: 200, xl: 250 } }}>
-                                    <Table stickyHeader aria-label="commits sticky table" sx={{ tableLayout: 'fixed' }}>
-                                        <TableHead>
-                                            <TableRow>
-                                                {commitsColumns.map((column, n) => (
-                                                    <TableCell
-                                                        key={n}
-                                                        align={"left"}
-                                                        sx={{ width: '33%', whiteSpace: 'normal', wordBreak: 'break-word', }}
-                                                    >
-                                                        {column.headerName}
-                                                    </TableCell>
-                                                ))}
-                                            </TableRow>
-                                        </TableHead>
-                                        <TableBody>
-                                            {commitsRows
-                                                .map((row, n) => {
-                                                    return (
-                                                        <TableRow hover role="checkbox" tabIndex={-1} key={n}>
-                                                            <TableCell sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>{row.author}</TableCell>
-                                                            <TableCell align="left" sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>{row.date}</TableCell>
-                                                            <TableCell align="left" sx={{ whiteSpace: 'normal', wordBreak: 'break-word' }}>{row.message}</TableCell>
-                                                        </TableRow>
-                                                    );
-                                                })}
-                                        </TableBody>
-                                    </Table>
-                                </TableContainer>
-                            </Paper>
-                            :
-                            <Typography variant="h6">
-                                {doI18n("pages:content:no_commits", i18nRef.current)}
-                            </Typography>
-                        }
-                    </Box>
-                    <Box sx={{ width: '100%' }}>
-                        {
+                    </Grid2>
+                </Grid2>
+            </Grid2>
+            <Grid2
+                container sx={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                }}
+                item
+                size={12}
+            >
+                <Grid2 item size="grow">
+                    <Button
+                        fullWidth
+                        id="demo-customized-button"
+                        aria-controls={open ? 'demo-customized-menu' : undefined}
+                        aria-haspopup="true"
+                        aria-expanded={open ? 'true' : undefined}
+                        variant="outlined"
+                        disableElevation
+                        onClick={handleClick}
+                        endIcon={<KeyboardArrowDownIcon />}>
+                        {commits.length} Label(s)
+                    </Button>
+                    {commits.length > 0
+                        ?
+                        <Menu
+                            anchorEl={anchorEl}
+                            open={openCommit}
+                            onClose={() => setAnchorEl(null)}
+                        >
+                            <PanTable
+                                columns={commitsColumns}
+                                rows={commitsRows}
+                            />
+                        </Menu>
+                        :
+                        <Typography variant="h6">
+                            {doI18n("pages:content:no_commits", i18nRef.current)}
+                        </Typography>
+
+                    }
+                </Grid2>
+
+                <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
+                    {/* Button configure settings */}
+                    {/* {
                             remotes.length === 0 &&
                             <Link
                                 component="button"
@@ -315,39 +296,43 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                             >
                                 {doI18n("pages:content:add_remote_repo_to_update", i18nRef.current)}
                             </Link>
-                        }
-                        <Tooltip title={!enabledRef.current ? doI18n("pages:content:operation_requires_internet", i18nRef.current) : doI18n("pages:content:update_remote", i18nRef.current)}>
-                            <span sx={{ display: 'inline-block' }}>
-                                <Button
-                                    fullWidth
-                                    color='secondary'
-                                    disabled={!enabledRef.current || remotes.length === 0 || !remoteUrlValue.startsWith("https://")}
-                                    onClick={(event) => {
-                                        if (status.length > 0) {
-                                            setUpdateAnywaysAnchorEl(event.currentTarget)
-                                        } else {
-                                            setPushAnchorEl(event.currentTarget)
-                                        }
-                                    }}
-                                >
-                                    {doI18n("pages:content:update_remote", i18nRef.current)}
-                                </Button>
-                            </span>
-                        </Tooltip>
-                        <Button
-                            fullWidth
-                            color='secondary'
-                            onClick={(event) => {
-                                setPullAnchorEl(event.currentTarget)
-                            }}
-                            disabled={status.length > 0}
-                        >
-                            {doI18n("pages:content:pull_from_downloaded", i18nRef.current)}
-                        </Button>
-                    </Box>
-                </Stack>
-            </Item>
-        </Stack>
+                        } */}
+                    <Tooltip title={!enabledRef.current ? doI18n("pages:core-contenthandler_version_manager:operation_requires_internet", i18nRef.current) : doI18n("pages:core-contenthandler_version_manager:update_remote", i18nRef.current)}>
+                        <span>
+                            <IconButton
+                                fullWidth
+                                color='secondary'
+                                disabled={!enabledRef.current || remotes.length === 0 || !remoteUrlValue.startsWith("https://")}
+                                onClick={(event) => {
+                                    if (status.length > 0 || !originBranch) {
+                                        setUpdateAnywaysAnchorEl(event.currentTarget)
+                                    } else {
+                                        setPushAnchorEl(event.currentTarget)
+                                    }
+                                }}
+                            >
+                                <ShareOutlinedIcon />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                    <Tooltip title={!syncBranches ? doI18n("pages:core-contenthandler_version_manager:sync_repo", i18nRef.current) :doI18n("pages:core-contenthandler_version_manager:synchronisation", i18nRef.current)}>
+                        <span>
+                            <IconButton
+                                fullWidth
+                                color='secondary'
+                                onClick={(event) => {
+                                    setPullAnchorEl(event.currentTarget)
+                                }}
+                                disabled={status.length > 0 || !syncBranches}
+                            >
+                                <UpdateOutlinedIcon />
+                            </IconButton>
+                        </span>
+                    </Tooltip>
+                </Grid2>
+
+            </Grid2>
+        </Grid2>
         <PushToDcs
             repoPath={repoPath}
             repoName={repoName}
@@ -361,23 +346,11 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
             open={pullOpen}
             closeFn={() => setPullAnchorEl(null)}
         />
-        <Dialog
-            open={updateAnywaysOpen}
-            onClose={() => setUpdateAnywaysAnchorEl(null)}
-            maxWidth={"lg"}
-            slotProps={{
-                paper: {
-                    component: 'form',
-                },
-            }}
+        <PanDialog
+            titleLabel={doI18n("pages:content:update_without_latest_changes", i18nRef.current)}
+            isOpen={updateAnywaysOpen}
+            closeFn={() => setUpdateAnywaysAnchorEl(null)}
         >
-            <AppBar color='secondary' sx={{ position: 'relative', borderTopLeftRadius: 4, borderTopRightRadius: 4 }}>
-                <Toolbar>
-                    <Typography variant="h6" component="div">
-                        {doI18n("pages:content:update_without_latest_changes", i18nRef.current)}
-                    </Typography>
-                </Toolbar>
-            </AppBar>
             <DialogContent>
                 <DialogContentText>
                     <Typography variant="body1">
@@ -385,17 +358,13 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                     </Typography>
                 </DialogContentText>
             </DialogContent>
-            <DialogActions>
-                <Button color="warning" onClick={() => setUpdateAnywaysAnchorEl(null)}>
-                    {doI18n("pages:content:cancel", i18nRef.current)}
-                </Button>
-                <Button
-                    variant='contained'
-                    color="primary"
-                    onClick={(event) => setPushAnchorEl(event.currentTarget)}
-                >{doI18n("pages:content:update_anyways", i18nRef.current)}</Button>
-            </DialogActions>
-        </Dialog>
+            <PanDialogActions
+                closeFn={() => setUpdateAnywaysAnchorEl(null)}
+                closeLabel={doI18n("pages:content:cancel", i18nRef.current)}
+                actionFn={(event) => setPushAnchorEl(event.currentTarget)}
+                actionLabel={doI18n("pages:content:update_anyways", i18nRef.current)}
+            />
+        </PanDialog>
     </Box>;
 }
 
