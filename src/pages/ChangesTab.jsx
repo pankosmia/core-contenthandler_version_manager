@@ -193,7 +193,7 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
             gap={5}
         >
             <Grid2 item size={12}>
-                <Typography variant='caption'> {doI18n("pages:content:commit_helper_text", i18nRef.current)} </Typography>
+                <Typography variant='caption'> {doI18n("pages:core-contenthandler_version_manager:commit_helper_text", i18nRef.current)} </Typography>
                 {status.length > 0
                     ?
                     <PanTable
