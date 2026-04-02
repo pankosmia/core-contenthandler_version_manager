@@ -8,8 +8,10 @@ import {
     DialogContent,
     DialogContentText,
     IconButton,
-    Menu,
-    Grid2
+    Grid2,
+    Accordion,
+    AccordionSummary,
+    AccordionDetails
 } from "@mui/material";
 import { doI18n, postJson, getJson } from "pithekos-lib";
 import { debugContext, i18nContext, netContext, PanTable, PanDialog, PanDialogActions } from "pankosmia-rcl";
@@ -18,8 +20,7 @@ import PushToDcs from './PushToDcs';
 import PullFromDownloaded from "./PullFromDownloaded";
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import UpdateOutlinedIcon from '@mui/icons-material/UpdateOutlined';
-import KeyboardArrowDownIcon from '@mui/icons-material/KeyboardArrowDown';
-
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists }) {
 
     const { i18nRef } = useContext(i18nContext);
@@ -41,12 +42,6 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
     const [updateAnywaysAnchorEl, setUpdateAnywaysAnchorEl] = useState(null);
     const updateAnywaysOpen = Boolean(updateAnywaysAnchorEl);
 
-    const [anchorEl, setAnchorEl] = useState(null);
-    const openCommit = Boolean(anchorEl);
-
-    const handleClick = (event) => {
-        setAnchorEl(event.currentTarget);
-    };
 
     const repoStatus = async (repo_path) => {
         const statusUrl = `/git/status/${repo_path}`;
@@ -185,15 +180,17 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
             direction="row"
             sx={{
                 display: "flex",
-                justifyContent: "center",
+                justifyContent: "flex-start",
                 alignItems: "center",
             }}
             columnSpacing={1}
             rowSpacing={1}
-            gap={5}
+            gap={1}
         >
+            <Grid2 item size={{ "@xs": 2, "@md": 1 }} >
+                <Typography variant='h6'>{doI18n("pages:core-contenthandler_version_manager:file_modified", i18nRef.current)} </Typography>
+            </Grid2>
             <Grid2 item size={12}>
-                <Typography variant='caption'> {doI18n("pages:core-contenthandler_version_manager:commit_helper_text", i18nRef.current)} </Typography>
                 {status.length > 0
                     ?
                     <PanTable
@@ -201,18 +198,20 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                         rows={statusRows}
                     />
                     :
-                    <Button disabled  fullWidth variant="outlined">
-                        {doI18n("pages:content:no_changes", i18nRef.current)}
-                    </Button>
+                    <Typography color='textDisabled'>{doI18n("pages:content:no_changes", i18nRef.current)}</Typography>
                 }
                 <Grid2 />
-                <Grid2 container sx={{
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                }}
-                    item
-                    size={12}>
+                <Grid2
+                    container
+                    sx={{
+                        display: "flex",
+                        justifyContent: "center",
+                        alignItems: "center",
+                    }}
+                >
+                    <Grid2 item size={{ "@xs": 2, "@md": 1 }} sx={{ alignSelf: "" }}>
+                        <Typography variant='caption'> {doI18n("pages:core-contenthandler_version_manager:commit_helper_text", i18nRef.current)} </Typography>
+                    </Grid2>
                     <Grid2 item size="grow">
                         <TextField
                             id="commit-message-input"
@@ -239,51 +238,49 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                     </Grid2>
                 </Grid2>
             </Grid2>
-            <Grid2
-                container sx={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                }}
-                item
-                size={12}
-            >
-                <Grid2 item size="grow">
-                    <Button
-                        fullWidth
-                        id="demo-customized-button"
-                        aria-controls={open ? 'demo-customized-menu' : undefined}
-                        aria-haspopup="true"
-                        aria-expanded={open ? 'true' : undefined}
-                        variant="outlined"
-                        disableElevation
-                        onClick={handleClick}
-                        endIcon={<KeyboardArrowDownIcon />}>
-                        {commits.length} Label(s)
-                    </Button>
-                    {commits.length > 0
-                        ?
-                        <Menu
-                            anchorEl={anchorEl}
-                            open={openCommit}
-                            onClose={() => setAnchorEl(null)}
-                        >
+        </Grid2>
+        <Grid2
+           container
+            direction="row"
+            sx={{
+                display: "flex",
+                justifyContent: "center",
+                alignItems: "center",
+            }}
+            columnSpacing={0.5}
+            rowSpacing={2}
+            gap={1}
+            marginTop={5}
+        >
+            <Grid2 item size="grow">
+                <Accordion>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                    >
+                        <Typography component="span"> {commits.length} {doI18n("pages:core-contenthandler_version_manager:label", i18nRef.current)}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        {commits.length > 0
+                            ?
                             <PanTable
                                 columns={commitsColumns}
                                 rows={commitsRows}
                             />
-                        </Menu>
-                        :
-                        <Typography variant="h6">
-                            {doI18n("pages:content:no_commits", i18nRef.current)}
-                        </Typography>
+                            :
+                            <Typography variant="h6">
+                                {doI18n("pages:content:no_commits", i18nRef.current)}
+                            </Typography>
 
-                    }
-                </Grid2>
+                        }
+                    </AccordionDetails>
+                </Accordion>
+            </Grid2>
 
-                <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
-                    {/* Button configure settings */}
-                    {/* {
+            <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
+                {/* Button configure settings */}
+                {/* {
                             remotes.length === 0 &&
                             <Link
                                 component="button"
@@ -297,41 +294,40 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                                 {doI18n("pages:content:add_remote_repo_to_update", i18nRef.current)}
                             </Link>
                         } */}
-                    <Tooltip title={!enabledRef.current ? doI18n("pages:core-contenthandler_version_manager:operation_requires_internet", i18nRef.current) : doI18n("pages:core-contenthandler_version_manager:update_remote", i18nRef.current)}>
-                        <span>
-                            <IconButton
-                                fullWidth
-                                color='secondary'
-                                disabled={!enabledRef.current || remotes.length === 0 || !remoteUrlValue.startsWith("https://")}
-                                onClick={(event) => {
-                                    if (status.length > 0 || !originBranch) {
-                                        setUpdateAnywaysAnchorEl(event.currentTarget)
-                                    } else {
-                                        setPushAnchorEl(event.currentTarget)
-                                    }
-                                }}
-                            >
-                                <ShareOutlinedIcon />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
-                    <Tooltip title={!syncBranches ? doI18n("pages:core-contenthandler_version_manager:sync_repo", i18nRef.current) :doI18n("pages:core-contenthandler_version_manager:synchronisation", i18nRef.current)}>
-                        <span>
-                            <IconButton
-                                fullWidth
-                                color='secondary'
-                                onClick={(event) => {
-                                    setPullAnchorEl(event.currentTarget)
-                                }}
-                                disabled={status.length > 0 || !syncBranches}
-                            >
-                                <UpdateOutlinedIcon />
-                            </IconButton>
-                        </span>
-                    </Tooltip>
-                </Grid2>
-
+                <Tooltip title={!enabledRef.current ? doI18n("pages:core-contenthandler_version_manager:operation_requires_internet", i18nRef.current) : doI18n("pages:core-contenthandler_version_manager:update_remote", i18nRef.current)}>
+                    <span>
+                        <IconButton
+                            fullWidth
+                            color='secondary'
+                            disabled={!enabledRef.current || remotes.length === 0 || !remoteUrlValue.startsWith("https://")}
+                            onClick={(event) => {
+                                if (status.length > 0 || !originBranch) {
+                                    setUpdateAnywaysAnchorEl(event.currentTarget)
+                                } else {
+                                    setPushAnchorEl(event.currentTarget)
+                                }
+                            }}
+                        >
+                            <ShareOutlinedIcon />
+                        </IconButton>
+                    </span>
+                </Tooltip>
+                <Tooltip title={!syncBranches ? doI18n("pages:core-contenthandler_version_manager:sync_repo", i18nRef.current) : doI18n("pages:core-contenthandler_version_manager:synchronisation", i18nRef.current)}>
+                    <span>
+                        <IconButton
+                            fullWidth
+                            color='secondary'
+                            onClick={(event) => {
+                                setPullAnchorEl(event.currentTarget)
+                            }}
+                            disabled={status.length > 0 || !syncBranches}
+                        >
+                            <UpdateOutlinedIcon />
+                        </IconButton>
+                    </span>
+                </Tooltip>
             </Grid2>
+
         </Grid2>
         <PushToDcs
             repoPath={repoPath}
