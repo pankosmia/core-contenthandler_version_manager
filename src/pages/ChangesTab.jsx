@@ -191,25 +191,39 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
                 <Typography variant='h6'>{doI18n("pages:core-contenthandler_version_manager:file_modified", i18nRef.current)} </Typography>
             </Grid2>
             <Grid2 item size={12}>
-                {status.length > 0
-                    ?
-                    <PanTable
-                        columns={statusColumns}
-                        rows={statusRows}
-                    />
-                    :
-                    <Typography color='textDisabled'>{doI18n("pages:content:no_changes", i18nRef.current)}</Typography>
-                }
+                <Accordion disabled={status.length === 0}>
+                    <AccordionSummary
+                        expandIcon={<ExpandMoreIcon />}
+                        aria-controls="panel1-content"
+                        id="panel1-header"
+                    >
+                        <Typography component="span"> {`${status.length} modification(s)`} </Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        {status.length > 0
+                            &&
+                            <PanTable
+                                columns={statusColumns}
+                                rows={statusRows}
+                            />
+                        }
+                    </AccordionDetails>
+                </Accordion>
+
                 <Grid2 />
                 <Grid2
                     container
                     sx={{
                         display: "flex",
-                        justifyContent: "center",
+                        justifyContent: "flex-start",
                         alignItems: "center",
                     }}
+                    marginTop={5}
                 >
-                    <Grid2 item size={{ "@xs": 2, "@md": 1 }} sx={{ alignSelf: "" }}>
+                    <Grid2 item size={{ "@xs": 2, "@md": 1 }} >
+                        <Typography variant='h6'>{doI18n("pages:core-contenthandler_version_manager:title_label", i18nRef.current)} </Typography>
+                    </Grid2>
+                    <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
                         <Typography variant='caption'> {doI18n("pages:core-contenthandler_version_manager:commit_helper_text", i18nRef.current)} </Typography>
                     </Grid2>
                     <Grid2 item size="grow">
@@ -240,12 +254,12 @@ function ChangesTab({ repoPath, repoName, open, setTabValue, setRemoteUrlExists 
             </Grid2>
         </Grid2>
         <Grid2
-           container
+            container
             direction="row"
             sx={{
                 display: "flex",
                 justifyContent: "center",
-                alignItems: "center",
+                alignItems: "flex-start",
             }}
             columnSpacing={0.5}
             rowSpacing={2}
