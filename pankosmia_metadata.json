@@ -2,7 +2,7 @@
   "id": "core-contenthandler_version_manager",
   "exclude_from_menu": true,
   "exclude_from_dashboard": true,
-  "minServerVersion":"0.12.14",
+  "minServerVersion": "0.12.14",
   "require": {
     "net": false,
     "debug": true
@@ -28,21 +28,21 @@
     "stub_content": {
       "en": "Content goes here"
     },
-    "synchronisation":{
-      "en":"Synchronization",
-      "fr":"Synchroniser"
+    "synchronisation": {
+      "en": "Synchronization",
+      "fr": "Synchroniser"
     },
-    "sync_repo":{
-      "en":"Cannot sync: configure download in the settings tab",
-      "fr":"Synchronisation impossible : configurer le téléchargement dans paramètre"
+    "sync_repo": {
+      "en": "Cannot sync: configure download in the settings tab",
+      "fr": "Synchronisation impossible : configurer le téléchargement dans paramètre"
     },
-     "operation_requires_internet": {
+    "operation_requires_internet": {
       "en": "Cannot upload to door43: an internet connection is required to continue (currently offline)",
       "es": "@Se requiere una conexión a internet para continuar (actualmente está desconectado)",
       "id": "@Koneksi internet diperlukan untuk melanjutkan (saat ini terputus)",
       "fr": "@Il faut se connecter à internet pour poursuivre (actuellement hors-ligne)"
     },
-     "update_remote": {
+    "update_remote": {
       "en": "Share to door43",
       "es": "@Compartir",
       "fr": "Téléverser sur Door43",
@@ -54,18 +54,21 @@
       "fr": "Étiqueter les modifications ajoute une sauvegarde du document. Les étiquettes sont un historique des versions, utilisez des descriptions claires. Nous suggérons une étiquette par jour pour suivre le progrès.",
       "id": "@Komit-komit menciptakan sejarah proyek. Gunakan nama yang bermakna. Kami menyarankan satu komitmen per hari untuk mendokumentasikan kemajuan."
     },
-    "label":{
-      "en":"Label(s)",
-      "fr":"Étiquette(s)"
+    "label": {
+      "en": "Label(s)",
+      "fr": "Étiquette(s)"
     },
-    "title_label":{
-      "en":"Labels",
-      "fr":"Étiquettes"
+    "title_label": {
+      "en": "Labels",
+      "fr": "Étiquettes"
     },
-    "file_modified":{
-      "en":"Files modified",
-      "fr":"Fichiers modifiés"
+    "title_files_modified": {
+      "en": "Files modified",
+      "fr": "Fichiers modifiés"
+    },
+    "files_modified": {
+      "en": "Modification(s)",
+      "fr": "Modification(s)"
     }
-
   }
 }

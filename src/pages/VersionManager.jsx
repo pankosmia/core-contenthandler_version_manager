@@ -1,161 +1,171 @@
-import { useState, useContext, useEffect } from 'react';
-import {
-    Box,
-    Tabs,
-    Tab,
-    DialogContent
-} from "@mui/material";
-import PropTypes from 'prop-types';
+import { useState, useContext, useEffect } from "react";
+import { Box, Tabs, Tab, DialogContent } from "@mui/material";
+import PropTypes from "prop-types";
 import { doI18n, getJson } from "pithekos-lib";
-import ChangesTab from './ChangesTab';
-import SettingsTab from './SettingsTab';
-import { PanDialog, PanDialogActions, debugContext, i18nContext, Header } from "pankosmia-rcl";
+import ChangesTab from "./ChangesTab";
+import SettingsTab from "./SettingsTab";
+import {
+  PanDialog,
+  PanDialogActions,
+  debugContext,
+  i18nContext,
+  Header,
+} from "pankosmia-rcl";
 function CustomTabPanel(props) {
-    const { children, value, index, ...other } = props;
-    return (
-        <div
-            role="tabpanel"
-            hidden={value !== index}
-            id={`simple-tabpanel-${index}`}
-            aria-labelledby={`simple-tab-${index}`}
-            {...other}
-        >
-            {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-        </div>
-    );
+  const { children, value, index, ...other } = props;
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
 }
 
 CustomTabPanel.propTypes = {
-    children: PropTypes.node,
-    index: PropTypes.number.isRequired,
-    value: PropTypes.number.isRequired,
+  children: PropTypes.node,
+  index: PropTypes.number.isRequired,
+  value: PropTypes.number.isRequired,
 };
 
 function a11yProps(index) {
-    return {
-        id: `simple-tab-${index}`,
-        'aria-controls': `simple-tabpanel-${index}`,
-    };
+  return {
+    id: `simple-tab-${index}`,
+    "aria-controls": `simple-tabpanel-${index}`,
+  };
 }
 
 function VersionManager() {
-    const { i18nRef } = useContext(i18nContext);
-    const [tabValue, setTabValue] = useState(0);
-    const [remoteUrlExists, setRemoteUrlExists] = useState(true);
-    const [bookNames, setBookNames] = useState([]);
-    const [repoPath, setRepoPath] = useState([]);
-    const [open, setOpen] = useState(true);
-    const [repoName, setRepoName] = useState([]);
-    const hash = window.location.hash;
-    const query = hash.includes('?') ? hash.split('?') : '';
-    const params = new URLSearchParams(query[1]);
-    const typePageQuery = new URLSearchParams(query[2]);
-    const returnType = typePageQuery.get("returnTypePage");
+  const { i18nRef } = useContext(i18nContext);
+  const [tabValue, setTabValue] = useState(0);
+  const [remoteUrlExists, setRemoteUrlExists] = useState(true);
+  const [bookNames, setBookNames] = useState([]);
+  const [repoPath, setRepoPath] = useState([]);
+  const [open, setOpen] = useState(true);
+  const [repoName, setRepoName] = useState([]);
+  const hash = window.location.hash;
+  const query = hash.includes("?") ? hash.split("?") : "";
+  const params = new URLSearchParams(query[1]);
+  const typePageQuery = new URLSearchParams(query[2]);
+  const returnType = typePageQuery.get("returnTypePage");
 
-    const path = params.get('repoPath');
+  const path = params.get("repoPath");
 
-    const handleTabsChange = (event, newValue) => {
-        setTabValue(newValue);
-    };
+  const handleTabsChange = (event, newValue) => {
+    setTabValue(newValue);
+  };
 
-    const handleClose = () => {
-        setOpen(false);
-        if (returnType === "dashboard") {
-            setTimeout(() => {
-                window.location.href = '/clients/main';
-            });
-        } else {
-            setTimeout(() => {
-                window.location.href = '/clients/content';
-            }, 300);
-        }
-    };
-    const getProjectSummaries = async () => {
-
-        setRepoPath(path);
-        const summariesResponse = await getJson(`/burrito/metadata/summary/${path}`, debugContext.current);
-        if (summariesResponse.ok) {
-            const data = summariesResponse.json;
-            const bookCode = data.book_codes;
-            setBookNames(bookCode);
-            const name = data.name;
-            setRepoName(name);
-        } else {
-            console.error(" Erreur lors de la récupération des données.");
-        }
-    };
-    useEffect(
-        () => {
-            getProjectSummaries();
-        },
-        []
+  const handleClose = () => {
+    setOpen(false);
+    if (returnType === "dashboard") {
+      setTimeout(() => {
+        window.location.href = "/clients/main";
+      });
+    } else {
+      setTimeout(() => {
+        window.location.href = "/clients/content";
+      }, 300);
+    }
+  };
+  const getProjectSummaries = async () => {
+    setRepoPath(path);
+    const summariesResponse = await getJson(
+      `/burrito/metadata/summary/${path}`,
+      debugContext.current,
     );
-    return (
-        <Box>
-            <Box
-                sx={{
-                    position: "absolute",
-                    width: "100%",
-                    height: "100%",
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    zIndex: -1,
-                    backgroundImage:
-                        'url("/app-resources/pages/content/background_blur.png")',
-                    backgroundRepeat: "no-repeat",
-                }}
-            />
-            <Header
-                titleKey={returnType === "dashboard" ? "pages:core-dashboard:title" : "pages:content:title"}
-                currentId="content"
-                requireNet={false}
-                showInternetSwitch={false}
-            />
-            <PanDialog
-                titleLabel={`${doI18n("pages:content:version_manager", i18nRef.current)} - ${repoName}`}
-                isOpen={open}
-                closeFn={() => handleClose()}
-                showInternetSwitch={true}
+    if (summariesResponse.ok) {
+      const data = summariesResponse.json;
+      const bookCode = data.book_codes;
+      setBookNames(bookCode);
+      const name = data.name;
+      setRepoName(name);
+    } else {
+      console.error(" Erreur lors de la récupération des données.");
+    }
+  };
+  useEffect(() => {
+    getProjectSummaries();
+  }, []);
+  return (
+    <Box>
+      <Box
+        sx={{
+          position: "absolute",
+          width: "100%",
+          height: "100%",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          zIndex: -1,
+          backgroundImage:
+            'url("/app-resources/pages/content/background_blur.png")',
+          backgroundRepeat: "no-repeat",
+        }}
+      />
+      <Header
+        titleKey={
+          returnType === "dashboard"
+            ? "pages:core-dashboard:title"
+            : "pages:content:title"
+        }
+        currentId="content"
+        requireNet={false}
+        showInternetSwitch={false}
+      />
+      <PanDialog
+        titleLabel={`${doI18n("pages:content:version_manager", i18nRef.current)} - ${repoName}`}
+        isOpen={open}
+        closeFn={() => handleClose()}
+        showInternetSwitch={true}
+      >
+        <DialogContent>
+          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+            <Tabs
+              value={tabValue}
+              //variant="fullWidth"
+              onChange={handleTabsChange}
+              aria-label="version manager tabs"
+              //centered
             >
-                <DialogContent>
-                    <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Tabs
-                            value={tabValue}
-                            //variant="fullWidth"
-                            onChange={handleTabsChange}
-                            aria-label="version manager tabs"
-                        //centered
-                        >
-                            <Tab label={doI18n("pages:content:changes_tab", i18nRef.current)} {...a11yProps(0)} />
-                            <Tab label={doI18n("pages:content:settings_tab", i18nRef.current)} {...a11yProps(1)} />
-                        </Tabs>
-                    </Box>
-                    <CustomTabPanel value={tabValue} index={0}>
-                        <ChangesTab
-                            repoPath={repoPath}
-                            repoName={repoName}
-                            open={tabValue === 0}
-                            setTabValue={setTabValue}
-                            setRemoteUrlExists={setRemoteUrlExists}
-                        />
-                    </CustomTabPanel>
-                    <CustomTabPanel value={tabValue} index={1}>
-                        <SettingsTab
-                            repoInfo={repoPath}
-                            open={tabValue === 1}
-                            remoteUrlExists={remoteUrlExists}
-                            setRemoteUrlExists={setRemoteUrlExists}
-                        />
-                    </CustomTabPanel>
-                </DialogContent>
-                <PanDialogActions
-                    closeFn={() => handleClose()}
-                    closeLabel={doI18n("pages:content:close", i18nRef.current)}
-                    onlyCloseButton={true}
-                />
-            </PanDialog>
-        </Box>
-    );
+              <Tab
+                label={doI18n("pages:content:changes_tab", i18nRef.current)}
+                {...a11yProps(0)}
+              />
+              <Tab
+                label={doI18n("pages:content:settings_tab", i18nRef.current)}
+                {...a11yProps(1)}
+              />
+            </Tabs>
+          </Box>
+          <CustomTabPanel value={tabValue} index={0}>
+            <ChangesTab
+              repoPath={repoPath}
+              repoName={repoName}
+              open={tabValue === 0}
+              setTabValue={setTabValue}
+              setRemoteUrlExists={setRemoteUrlExists}
+            />
+          </CustomTabPanel>
+          <CustomTabPanel value={tabValue} index={1}>
+            <SettingsTab
+              repoInfo={repoPath}
+              open={tabValue === 1}
+              remoteUrlExists={remoteUrlExists}
+              setRemoteUrlExists={setRemoteUrlExists}
+            />
+          </CustomTabPanel>
+        </DialogContent>
+        <PanDialogActions
+          closeFn={() => handleClose()}
+          closeLabel={doI18n("pages:content:close", i18nRef.current)}
+          onlyCloseButton={true}
+        />
+      </PanDialog>
+    </Box>
+  );
 }
 
 export default VersionManager;
