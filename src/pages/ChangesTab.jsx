@@ -27,7 +27,6 @@ import PushToDcs from "./PushToDcs";
 import PullFromDownloaded from "./PullFromDownloaded";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
-import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 
 function ChangesTab({
@@ -55,13 +54,6 @@ function ChangesTab({
 
   const [updateAnywaysAnchorEl, setUpdateAnywaysAnchorEl] = useState(null);
   const updateAnywaysOpen = Boolean(updateAnywaysAnchorEl);
-
-  const [anchorEl, setAnchorEl] = useState(null);
-  const openCommit = Boolean(anchorEl);
-
-  const handleClick = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
 
   const repoStatus = async (repo_path) => {
     const statusUrl = `/git/status/${repo_path}`;
