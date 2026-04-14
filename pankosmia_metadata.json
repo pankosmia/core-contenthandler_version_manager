@@ -55,8 +55,8 @@
       "id": "@Komit-komit menciptakan sejarah proyek. Gunakan nama yang bermakna. Kami menyarankan satu komitmen per hari untuk mendokumentasikan kemajuan."
     },
     "label": {
-      "en": "Label(s)",
-      "fr": "Étiquette(s)"
+      "en": "label(s)",
+      "fr": "étiquette(s)"
     },
     "title_label": {
       "en": "Labels",
@@ -67,8 +67,14 @@
       "fr": "Fichiers modifiés"
     },
     "files_modified": {
-      "en": "Modification(s)",
-      "fr": "Modification(s)"
+      "en": "modification(s)",
+      "fr": "modification(s)"
+    },
+    "commit_message": {
+      "en": "Label modification",
+      "es": "@Descripción de la etiqueta",
+      "fr": "Description de la modification",
+      "id": "@Catatan komit"
     }
   }
 }

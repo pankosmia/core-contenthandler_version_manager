@@ -262,7 +262,10 @@ function ChangesTab({
               <TextField
                 id="commit-message-input"
                 fullWidth
-                label={doI18n("pages:content:commit_message", i18nRef.current)}
+                label={doI18n(
+                  "pages:core-contenthandler_version_manager:commit_message",
+                  i18nRef.current,
+                )}
                 value={commitMessageValue}
                 variant="outlined"
                 onChange={(e) => setCommitMessageValue(e.target.value)}
