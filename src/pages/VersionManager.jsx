@@ -121,25 +121,33 @@ function VersionManager() {
         closeFn={() => handleClose()}
         showInternetSwitch={true}
       >
-        <DialogContent>
-          <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-            <Tabs
-              value={tabValue}
-              //variant="fullWidth"
-              onChange={handleTabsChange}
-              aria-label="version manager tabs"
-              //centered
-            >
-              <Tab
-                label={doI18n("pages:content:changes_tab", i18nRef.current)}
-                {...a11yProps(0)}
-              />
-              <Tab
-                label={doI18n("pages:content:settings_tab", i18nRef.current)}
-                {...a11yProps(1)}
-              />
-            </Tabs>
-          </Box>
+        <Box
+          sx={{
+            borderBottom: 1,
+            borderColor: "divider",
+            top: 0,
+            zIndex: 1,
+            backgroundColor: "background.paper",
+          }}
+        >
+          <Tabs
+            value={tabValue}
+            //variant="fullWidth"
+            onChange={handleTabsChange}
+            aria-label="version manager tabs"
+            //centered
+          >
+            <Tab
+              label={doI18n("pages:content:changes_tab", i18nRef.current)}
+              {...a11yProps(0)}
+            />
+            <Tab
+              label={doI18n("pages:content:settings_tab", i18nRef.current)}
+              {...a11yProps(1)}
+            />
+          </Tabs>
+        </Box>
+        <DialogContent sx={{ paddingTop: 0 }}>
           <CustomTabPanel value={tabValue} index={0}>
             <ChangesTab
               repoPath={repoPath}
