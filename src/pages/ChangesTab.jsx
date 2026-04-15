@@ -206,11 +206,11 @@ function ChangesTab({
         rowSpacing={1}
       >
         <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
-          <Typography variant="h6">
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {doI18n(
               "pages:core-contenthandler_version_manager:title_files_modified",
               i18nRef.current,
-            )}{" "}
+            )}
           </Typography>
         </Grid2>
         <Grid2 item size={12}>
@@ -221,8 +221,7 @@ function ChangesTab({
               id="panel1-header"
             >
               <Typography component="span">
-                {" "}
-                {`${status.length} ${doI18n("pages:core-contenthandler_version_manager:files_modified", i18nRef.current)}`}{" "}
+                {`${status.length} ${doI18n("pages:core-contenthandler_version_manager:files_modified", i18nRef.current)}`}
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -239,23 +238,22 @@ function ChangesTab({
               justifyContent: "flex-start",
               alignItems: "center",
             }}
-            marginTop={5}
+            marginTop={1}
           >
             <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
-              <Typography variant="h6">
+              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                 {doI18n(
                   "pages:core-contenthandler_version_manager:title_label",
                   i18nRef.current,
-                )}{" "}
+                )}
               </Typography>
             </Grid2>
             <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
               <Typography variant="caption">
-                {" "}
                 {doI18n(
                   "pages:core-contenthandler_version_manager:commit_helper_text",
                   i18nRef.current,
-                )}{" "}
+                )}
               </Typography>
             </Grid2>
             <Grid2 item size="grow">
@@ -300,14 +298,22 @@ function ChangesTab({
         direction="row"
         sx={{
           display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-start",
+          justifyContent: "flex-start",
+          alignItems: "center",
         }}
         columnSpacing={0.5}
         rowSpacing={2}
         gap={1}
         marginTop={5}
       >
+        <Grid2 item size={12}>
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+            {doI18n(
+              "pages:core-contenthandler_version_manager:title_modification_label",
+              i18nRef.current,
+            )}
+          </Typography>
+        </Grid2>
         <Grid2 item size="grow">
           <Accordion>
             <AccordionSummary
@@ -316,12 +322,7 @@ function ChangesTab({
               id="panel1-header"
             >
               <Typography component="span">
-                {" "}
-                {commits.length}{" "}
-                {doI18n(
-                  "pages:core-contenthandler_version_manager:label",
-                  i18nRef.current,
-                )}
+                {`${commits.length} ${doI18n("pages:core-contenthandler_version_manager:label", i18nRef.current)}`}
               </Typography>
             </AccordionSummary>
             <AccordionDetails>
@@ -335,7 +336,6 @@ function ChangesTab({
             </AccordionDetails>
           </Accordion>
         </Grid2>
-
         <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
           <Tooltip
             title={
