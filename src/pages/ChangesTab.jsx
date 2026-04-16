@@ -230,65 +230,65 @@ function ChangesTab({
               )}
             </AccordionDetails>
           </Accordion>
-          <Grid2 />
+        </Grid2>
+        <Grid2
+          container
+          sx={{
+            display: "flex",
+            direction: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+          }}
+          marginTop={1}
+        >
+          <Grid2 item size={12}>
+            <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+              {doI18n(
+                "pages:core-contenthandler_version_manager:title_label",
+                i18nRef.current,
+              )}
+            </Typography>
+          </Grid2>
+          <Grid2 item size={12}>
+            <Typography variant="caption">
+              {doI18n(
+                "pages:core-contenthandler_version_manager:commit_helper_text",
+                i18nRef.current,
+              )}
+            </Typography>
+          </Grid2>
+          <Grid2 item size="grow">
+            <TextField
+              id="commit-message-input"
+              fullWidth
+              label={doI18n(
+                "pages:core-contenthandler_version_manager:commit_message",
+                i18nRef.current,
+              )}
+              value={commitMessageValue}
+              variant="outlined"
+              onChange={(e) => setCommitMessageValue(e.target.value)}
+              required={true}
+              disabled={status.length === 0}
+              size={window.innerHeight <= 600 ? "small" : "medium"}
+              sx={{ mt: 1 }}
+            />
+          </Grid2>
           <Grid2
-            container
-            sx={{
-              display: "flex",
-              justifyContent: "flex-start",
-              alignItems: "center",
-            }}
-            marginTop={1}
+            item
+            size={{ "@xs": 2, "@md": 1 }}
+            sx={{ alignSelf: "center" }}
           >
-            <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
-              <Typography variant="h6" sx={{ fontWeight: "bold" }}>
-                {doI18n(
-                  "pages:core-contenthandler_version_manager:title_label",
-                  i18nRef.current,
-                )}
-              </Typography>
-            </Grid2>
-            <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
-              <Typography variant="caption">
-                {doI18n(
-                  "pages:core-contenthandler_version_manager:commit_helper_text",
-                  i18nRef.current,
-                )}
-              </Typography>
-            </Grid2>
-            <Grid2 item size="grow">
-              <TextField
-                id="commit-message-input"
-                fullWidth
-                label={doI18n(
-                  "pages:core-contenthandler_version_manager:commit_message",
-                  i18nRef.current,
-                )}
-                value={commitMessageValue}
-                variant="outlined"
-                onChange={(e) => setCommitMessageValue(e.target.value)}
-                required={true}
-                disabled={status.length === 0}
-                size={window.innerHeight <= 600 ? "small" : "medium"}
-                sx={{ mt: 1 }}
-              />
-            </Grid2>
-            <Grid2
-              item
-              size={{ "@xs": 2, "@md": 1 }}
-              sx={{ alignSelf: "center" }}
+            <Button
+              fullWidth
+              color="secondary"
+              disabled={status.length === 0 || commitMessageValue === ""}
+              onClick={() => {
+                addAndCommitRepo(repoPath, commitMessageValue).then();
+              }}
             >
-              <Button
-                fullWidth
-                color="secondary"
-                disabled={status.length === 0 || commitMessageValue === ""}
-                onClick={() => {
-                  addAndCommitRepo(repoPath, commitMessageValue).then();
-                }}
-              >
-                {doI18n("pages:content:accept", i18nRef.current)}
-              </Button>
-            </Grid2>
+              {doI18n("pages:content:accept", i18nRef.current)}
+            </Button>
           </Grid2>
         </Grid2>
       </Grid2>
