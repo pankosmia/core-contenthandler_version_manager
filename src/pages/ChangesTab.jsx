@@ -206,7 +206,7 @@ function ChangesTab({
         rowSpacing={1}
       >
         <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
-          <Typography variant="h6" sx={{ fontWeight: "bold" }} color="red">
+          <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {doI18n(
               "pages:core-contenthandler_version_manager:title_files_modified",
               i18nRef.current,
