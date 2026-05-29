@@ -22,7 +22,7 @@ function PushToDcs({ repoPath, repoName, open, closeFn }) {
   const [dcsPassword, setDcsPassword] = useState("");
 
   const pushRepo = async (repo_path, username, password) => {
-    const pushUrl = `/git/push/${repo_path}`;
+    const pushUrl = `/api/git/push/${repo_path}`;
     const pushJson = JSON.stringify({
       cred_type: "https",
       username: username,

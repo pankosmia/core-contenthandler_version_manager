@@ -26,7 +26,7 @@ function PullFromDownloaded({
   const { debugRef } = useContext(debugContext);
 
   const deleteUpdate = async (repoPath) => {
-    const deleteUpdateUrl = `/git/delete/${repoPath}`;
+    const deleteUpdateUrl = `/api/git/delete/${repoPath}`;
     const deleteUpdateResponse = await postEmptyJson(
       deleteUpdateUrl,
       debugRef.current,
@@ -41,7 +41,7 @@ function PullFromDownloaded({
 
   const mergeFromDownloaded = async () => {
     // Get downloaded from the remotes for local
-    const remoteListUrl = `/git/remotes/${repoPath}`;
+    const remoteListUrl = `/api/git/remotes/${repoPath}`;
     const remoteList = await getJson(remoteListUrl, debugRef.current);
     if (!remoteList.ok) {
       enqueueSnackbar(
@@ -76,7 +76,7 @@ function PullFromDownloaded({
 
     // Copy downloaded to updated
     const updateRepoPath = `_local_/_updates_/${repoPath.split("/")[2]}`;
-    const copyUrl = `/git/copy/${downloadRepoPath}?target_path=${updateRepoPath}`;
+    const copyUrl = `/api/git/copy/${downloadRepoPath}?target_path=${updateRepoPath}`;
     const copyResponse = await postEmptyJson(copyUrl, debugRef.current);
     if (!copyResponse.ok) {
       enqueueSnackbar(
@@ -88,7 +88,7 @@ function PullFromDownloaded({
     }
 
     // Set editable remote for updated repo which is copy of downloaded
-    const addEditableUrl = `/git/remote/add/${updateRepoPath}?remote_name=editable&remote_url=${repoPath}`;
+    const addEditableUrl = `/api/git/remote/add/${updateRepoPath}?remote_name=editable&remote_url=${repoPath}`;
     const addEditableResponse = await postEmptyJson(
       addEditableUrl,
       debugRef.current,
@@ -107,7 +107,7 @@ function PullFromDownloaded({
 
     // Attempt pull from editable to updated
     // If fail, delete updated and croak
-    const pull1Url = `/git/pull-repo/editable/${updateRepoPath}`;
+    const pull1Url = `/api/git/pull-repo/editable/${updateRepoPath}`;
     const pull1Response = await postEmptyJson(pull1Url, debugRef.current);
     if (!pull1Response.ok) {
       enqueueSnackbar(
@@ -131,7 +131,7 @@ function PullFromDownloaded({
     }
 
     // Pull from updated to local
-    const pull2Url = `/git/pull-repo/updates/${repoPath}`;
+    const pull2Url = `/api/git/pull-repo/updates/${repoPath}`;
     const pull2Response = await postEmptyJson(pull2Url, debugRef.current);
     if (!pull2Response.ok) {
       enqueueSnackbar(
