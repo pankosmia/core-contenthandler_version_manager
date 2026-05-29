@@ -43,7 +43,7 @@ function SettingsTab({
 
   useEffect(() => {
     const doFetch = async () => {
-      const remoteListUrl = `/git/remotes/${repoInfo}`;
+      const remoteListUrl = `/api/git/remotes/${repoInfo}`;
       const remoteList = await getJson(remoteListUrl, debugRef.current);
       if (remoteList.ok) {
         setRemotes(remoteList.json.payload.remotes);
@@ -65,7 +65,7 @@ function SettingsTab({
 
   const addRemoteRepo = async (repo_path) => {
     if (remotes.filter((p) => p.name === "origin")[0]) {
-      const deleteUrl = `/git/remote/delete/${repo_path}?remote_name=origin`;
+      const deleteUrl = `/api/git/remote/delete/${repo_path}?remote_name=origin`;
       const deleteResponse = await postEmptyJson(deleteUrl, debugRef.current);
       if (!deleteResponse.ok) {
         enqueueSnackbar(
@@ -75,7 +75,7 @@ function SettingsTab({
       }
     }
 
-    const addUrl = `/git/remote/add/${repo_path}?remote_name=origin&remote_url=${remoteUrlValue}`;
+    const addUrl = `/api/git/remote/add/${repo_path}?remote_name=origin&remote_url=${remoteUrlValue}`;
     const addResponse = await postEmptyJson(addUrl, debugRef.current);
     if (addResponse.ok) {
       enqueueSnackbar(
@@ -91,7 +91,7 @@ function SettingsTab({
   };
   const addRemoteDownloadedAndUpdate = async (repo_path_origin, repo_path) => {
     const copyrepo_path = `_local_/_local_/${repo_path.split("/")[2]}`;
-    const addUrl = `/git/remote/add/${copyrepo_path}?remote_name=downloaded&remote_url=${repo_path_origin}`;
+    const addUrl = `/api/git/remote/add/${copyrepo_path}?remote_name=downloaded&remote_url=${repo_path_origin}`;
     const addResponse = await postEmptyJson(addUrl, debugRef.current);
     if (!addResponse.ok) {
       enqueueSnackbar(
@@ -103,7 +103,7 @@ function SettingsTab({
       return;
     }
     const updatesPath = `_local_/_updates_/${repo_path.split("/")[2]}`;
-    const addUrl2 = `/git/remote/add/${copyrepo_path}?remote_name=updates&remote_url=${updatesPath}`;
+    const addUrl2 = `/api/git/remote/add/${copyrepo_path}?remote_name=updates&remote_url=${updatesPath}`;
     const addResponse2 = await postEmptyJson(addUrl2, debugRef.current);
     if (!addResponse2.ok) {
       enqueueSnackbar(
@@ -118,7 +118,7 @@ function SettingsTab({
   };
 
   const repoBranches = async (repo_path) => {
-    const branchesUrl = `/git/branches/${repo_path}`;
+    const branchesUrl = `/api/git/branches/${repo_path}`;
     const branchesResponse = await getJson(branchesUrl, debugRef.current);
     if (branchesResponse.ok) {
       setBranchList(branchesResponse.json.payload.branches);
@@ -131,7 +131,7 @@ function SettingsTab({
   };
 
   const checkoutBranch = async (repo_path, branch) => {
-    const branchUrl = `/git/branch/${branch}/${repo_path}`;
+    const branchUrl = `/api/git/branch/${branch}/${repo_path}`;
     const branchResponse = await postEmptyJson(branchUrl, debugRef.current);
 
     if (branchResponse.ok) {
@@ -155,7 +155,7 @@ function SettingsTab({
   };
 
   const createBranch = async (repo_path, new_branch) => {
-    const createBranchUrl = `/git/new-branch/${new_branch}/${repo_path}`;
+    const createBranchUrl = `/api/git/new-branch/${new_branch}/${repo_path}`;
     const createBranchResponse = await postEmptyJson(
       createBranchUrl,
       debugRef.current,
