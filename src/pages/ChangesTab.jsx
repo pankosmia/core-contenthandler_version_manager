@@ -56,7 +56,7 @@ function ChangesTab({
   const updateAnywaysOpen = Boolean(updateAnywaysAnchorEl);
 
   const repoStatus = async (repo_path) => {
-    const statusUrl = `/git/status/${repo_path}`;
+    const statusUrl = `/api/git/status/${repo_path}`;
     const statusResponse = await getJson(statusUrl, debugRef.current);
     if (statusResponse.ok) {
       setStatus(statusResponse.json);
@@ -69,7 +69,7 @@ function ChangesTab({
   };
 
   const repoCommits = async (repo_path) => {
-    const commitsUrl = `/git/log/${repo_path}`;
+    const commitsUrl = `/api//git/log/${repo_path}`;
     const commitsResponse = await getJson(commitsUrl, debugRef.current);
     if (commitsResponse.ok) {
       setCommits(commitsResponse.json);
@@ -82,7 +82,7 @@ function ChangesTab({
   };
 
   const repoRemotes = async (repo_path) => {
-    const remoteListUrl = `/git/remotes/${repo_path}`;
+    const remoteListUrl = `/api/git/remotes/${repo_path}`;
     const remoteList = await getJson(remoteListUrl, debugRef.current);
     if (remoteList.ok) {
       setRemotes(remoteList.json.payload.remotes);
@@ -114,7 +114,7 @@ function ChangesTab({
   }, [open, repoPath]);
 
   const addAndCommitRepo = async (repo_path, commitMessage) => {
-    const addAndCommitUrl = `/git/add-and-commit/${repo_path}`;
+    const addAndCommitUrl = `/api/git/add-and-commit/${repo_path}`;
     const commitJson = JSON.stringify({ commit_message: commitMessage });
     const addAndCommitResponse = await postJson(
       addAndCommitUrl,
