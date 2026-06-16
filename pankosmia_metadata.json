@@ -79,6 +79,11 @@
       "es": "@Descripción de la etiqueta",
       "fr": "Description de la modification",
       "id": "@Catatan komit"
+    },
+    "share": {
+      "en": "Share",
+      "es": "Compartir",
+      "fr": "Partager"
     }
   }
 }

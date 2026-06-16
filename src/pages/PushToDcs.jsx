@@ -107,7 +107,10 @@ function PushToDcs({ repoPath, repoName, open, closeFn }) {
             closeFn();
           }}
         >
-          {doI18n("pages:content:accept", i18nRef.current)}
+          {doI18n(
+            "pages:core-contenthandler_version_manager:share",
+            i18nRef.current,
+          )}
         </Button>
       </DialogActions>
     </Dialog>
