@@ -14,7 +14,8 @@ import {
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
-import { doI18n, postEmptyJson, getJson } from "pithekos-lib";
+import { postEmptyJson, getJson } from "pankosmia-lib/http";
+import { doI18n } from "pankosmia-lib/i18n";
 import { debugContext, i18nContext } from "pankosmia-rcl";
 import { enqueueSnackbar } from "notistack";
 

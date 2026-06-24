@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { getAndSetJson } from "pithekos-lib";
+import { getAndSetJson } from "pankosmia-lib/http";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import VersionManager from "./pages/VersionManager";
