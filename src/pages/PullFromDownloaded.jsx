@@ -1,11 +1,7 @@
 import { useContext } from "react";
-import {
-  Button,
-  DialogContent,
-  DialogContentText,
-  Typography,
-} from "@mui/material";
-import { doI18n, postEmptyJson, getJson } from "pithekos-lib";
+import { DialogContent, DialogContentText, Typography } from "@mui/material";
+import { postEmptyJson, getJson } from "pankosmia-lib/http";
+import { doI18n } from "pankosmia-lib/i18n";
 import {
   debugContext,
   i18nContext,

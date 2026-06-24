@@ -1,7 +1,8 @@
 import { useState, useContext, useEffect } from "react";
 import { Box, Tabs, Tab, DialogContent } from "@mui/material";
 import PropTypes from "prop-types";
-import { doI18n, getJson } from "pithekos-lib";
+import { getJson } from "pankosmia-lib/http";
+import { doI18n } from "pankosmia-lib/i18n";
 import ChangesTab from "./ChangesTab";
 import SettingsTab from "./SettingsTab";
 import {

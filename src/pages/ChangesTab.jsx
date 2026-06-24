@@ -13,7 +13,8 @@ import {
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material";
-import { doI18n, postJson, getJson } from "pithekos-lib";
+import { postJson, getJson } from "pankosmia-lib/http";
+import { doI18n } from "pankosmia-lib/i18n";
 import {
   debugContext,
   i18nContext,
