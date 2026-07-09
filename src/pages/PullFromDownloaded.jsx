@@ -28,15 +28,14 @@ function PullFromDownloaded({
       debugRef.current,
     );
     if (!deleteUpdateResponse) {
-      enqueueSnackbar(
-        doI18n("pages:content:could_not_delete_update", i18nRef.current),
-        { variant: "error" },
-      );
+      return false;
     }
+    return true;
   };
 
   const mergeFromDownloaded = async () => {
     // Get downloaded from the remotes for local
+    let deleteStatus;
     const remoteListUrl = `/api/git/remotes/${repoPath}`;
     const remoteList = await getJson(remoteListUrl, debugRef.current);
     if (!remoteList.ok) {
@@ -110,7 +109,14 @@ function PullFromDownloaded({
         doI18n("pages:content:could_not_pull_to_update", i18nRef.current),
         { variant: "error" },
       );
-      await deleteUpdate(updateRepoPath);
+
+      deleteStatus = await deleteUpdate(updateRepoPath);
+      if (!deleteStatus) {
+        enqueueSnackbar(
+          doI18n("pages:content:could_not_delete_update", i18nRef.current),
+          { variant: "error" },
+        );
+      }
       closeFn();
       return;
     }
@@ -121,7 +127,13 @@ function PullFromDownloaded({
         doI18n("pages:content:merge conflicts", i18nRef.current),
         { variant: "error" },
       );
-      await deleteUpdate(updateRepoPath);
+      deleteStatus = await deleteUpdate(updateRepoPath);
+      if (!deleteStatus) {
+        enqueueSnackbar(
+          doI18n("pages:content:could_not_delete_update", i18nRef.current),
+          { variant: "error" },
+        );
+      }
       closeFn();
       return;
     }
@@ -134,10 +146,18 @@ function PullFromDownloaded({
         doI18n("pages:content:could_not_pull_to_local", i18nRef.current),
         { variant: "error" },
       );
+      closeFn();
+      return;
     }
 
     // Delete updated regardless
-    await deleteUpdate(updateRepoPath);
+    deleteStatus = await deleteUpdate(updateRepoPath);
+    if (!deleteStatus) {
+      enqueueSnackbar(
+        doI18n("pages:content:could_not_delete_update", i18nRef.current),
+        { variant: "error" },
+      );
+    }
 
     // The end!
     enqueueSnackbar(doI18n("pages:content:pulled", i18nRef.current), {
