@@ -70,7 +70,7 @@ function ChangesTab({
   };
 
   const repoCommits = async (repo_path) => {
-    const commitsUrl = `/api//git/log/${repo_path}`;
+    const commitsUrl = `/api/git/log/${repo_path}`;
     const commitsResponse = await getJson(commitsUrl, debugRef.current);
     if (commitsResponse.ok) {
       setCommits(commitsResponse.json);
