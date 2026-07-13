@@ -66,6 +66,8 @@ function SettingsTab({
     doFetch().then();
   }, [reposModCount]);
 
+  let cleanRemoteUrlValue =
+    remoteUrlValue && remoteUrlValue.replace(".git", "");
   const addRemoteRepo = async (repo_path) => {
     if (remotes.filter((p) => p.name === "origin")[0]) {
       const deleteUrl = `/api/git/remote/delete/${repo_path}?remote_name=origin`;
@@ -79,8 +81,8 @@ function SettingsTab({
         return;
       }
     }
-
-    const addUrl = `/api/git/remote/add/${repo_path}?remote_name=origin&remote_url=${remoteUrlValue && remoteUrlValue.replace(".git", "")}`;
+    console.log("cleanUrl", cleanRemoteUrlValue);
+    const addUrl = `/api/git/remote/add/${repo_path}?remote_name=origin&remote_url=${cleanRemoteUrlValue}`;
     const addResponse = await postEmptyJson(addUrl, debugRef.current);
     if (addResponse.ok) {
       enqueueSnackbar(
@@ -98,8 +100,10 @@ function SettingsTab({
     }
   };
   const addRemoteDownloadedAndUpdate = async (repo_path_origin, repo_path) => {
-    const copyrepo_path = `_local_/_local_/${repo_path.split("/")[2]}`;
-    const addUrl = `/api/git/remote/add/${copyrepo_path}?remote_name=downloaded&remote_url=${repo_path_origin}`;
+    let cleanRemoteUrl =
+      repo_path_origin && repo_path_origin.replace(".git", "");
+    const copyrepo_path = `_local_/_local_/${repo_path && repo_path.split("/")[2].replace(".git", "")}`;
+    const addUrl = `/api/git/remote/add/${copyrepo_path}?remote_name=downloaded&remote_url=${cleanRemoteUrl}`;
     const addResponse = await postEmptyJson(addUrl, debugRef.current);
     if (!addResponse.ok) {
       enqueueSnackbar(
