@@ -143,13 +143,13 @@ function SettingsTab({
         );
       } else {
         enqueueSnackbar(
-          doI18n("pages:content:could_not_switch_branch", i18nRef.current),
+          `${doI18n("pages:content:could_not_switch_branch", i18nRef.current)}: ${JSON.parse(branchResponse?.error).reason}`,
           { variant: "error" },
         );
       }
     } else {
       enqueueSnackbar(
-        doI18n("pages:content:could_not_switch_branch", i18nRef.current),
+        `${doI18n("pages:content:could_not_switch_branch", i18nRef.current)}: ${JSON.parse(branchResponse?.error).reason}`,
         { variant: "error" },
       );
     }
@@ -270,6 +270,7 @@ function SettingsTab({
           {branchList
             .filter((branch) => !branch.name.includes("/"))
             .map((branch, n) => {
+              console.log(`/api/git/branch/${branch.name}/${repoInfo}`);
               return (
                 <ListItemButton
                   selected={selectedBranchIndex === n}
