@@ -57,8 +57,10 @@ function SettingsTab({
       } else {
         enqueueSnackbar(
           doI18n("pages:content:could_not_list_remotes", i18nRef.current),
+          `Server error : ${remoteList.status} ${remoteList.statusText} `,
           { variant: "error" },
         );
+        return;
       }
     };
     doFetch().then();
@@ -71,12 +73,14 @@ function SettingsTab({
       if (!deleteResponse.ok) {
         enqueueSnackbar(
           doI18n("pages:content:could_not_delete_remote", i18nRef.current),
+          `Server error : ${deleteResponse.status} ${deleteResponse.statusText} `,
           { variant: "error" },
         );
+        return;
       }
     }
 
-    const addUrl = `/api/git/remote/add/${repo_path}?remote_name=origin&remote_url=${remoteUrlValue}`;
+    const addUrl = `/api/git/remote/add/${repo_path}?remote_name=origin&remote_url=${remoteUrlValue && remoteUrlValue.replace(".git", "")}`;
     const addResponse = await postEmptyJson(addUrl, debugRef.current);
     if (addResponse.ok) {
       enqueueSnackbar(
@@ -86,8 +90,11 @@ function SettingsTab({
     } else {
       enqueueSnackbar(
         doI18n("pages:content:could_not_add_remote_repo", i18nRef.current),
+
+        `Server error :  ${addResponse.status} ${addResponse.statusText} `,
         { variant: "error" },
       );
+      return;
     }
   };
   const addRemoteDownloadedAndUpdate = async (repo_path_origin, repo_path) => {
@@ -97,6 +104,7 @@ function SettingsTab({
     if (!addResponse.ok) {
       enqueueSnackbar(
         doI18n("pages:content:could_not_add_remote_repo", i18nRef.current),
+        `Server error :  ${addResponse.status} ${addResponse.statusText} `,
         {
           variant: "error",
         },
@@ -110,6 +118,8 @@ function SettingsTab({
       enqueueSnackbar(
         doI18n("pages:content:could_not_add_remote_repo", i18nRef.current) +
           "2",
+        `Server error :  ${addResponse.status} ${addResponse.statusText} `,
+
         {
           variant: "error",
         },

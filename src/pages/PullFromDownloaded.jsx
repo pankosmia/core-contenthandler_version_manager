@@ -107,6 +107,7 @@ function PullFromDownloaded({
     if (!pull1Response.ok) {
       enqueueSnackbar(
         doI18n("pages:content:could_not_pull_to_update", i18nRef.current),
+        `Server error: ${pull1Response.status} ${pull1Response.statusText}`,
         { variant: "error" },
       );
 
@@ -144,6 +145,7 @@ function PullFromDownloaded({
     if (!pull2Response.ok) {
       enqueueSnackbar(
         doI18n("pages:content:could_not_pull_to_local", i18nRef.current),
+        `Server error: ${pull1Response.status} ${pull1Response.statusText}`,
         { variant: "error" },
       );
       closeFn();
@@ -155,6 +157,7 @@ function PullFromDownloaded({
     if (!deleteStatus) {
       enqueueSnackbar(
         doI18n("pages:content:could_not_delete_update", i18nRef.current),
+        `Server error: ${pull1Response.status} ${pull1Response.statusText}`,
         { variant: "error" },
       );
     }
