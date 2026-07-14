@@ -20,7 +20,34 @@ const router = createHashRouter([
 ]);
 function AppLayout() {
   const [themeSpec, setThemeSpec] = useState(fallbackTheme);
-  const theme = createTheme(themeSpec);
+  const theme = createTheme(
+    {
+      components: {
+        MuiFab: {
+          styleOverrides: {
+            root: {
+              textTransform: "capitalize",
+            },
+          },
+        },
+        MuiButton: {
+          styleOverrides: {
+            root: {
+              textTransform: "capitalize",
+            },
+          },
+        },
+        MuiTab: {
+          styleOverrides: {
+            root: {
+              textTransform: "capitalize",
+            },
+          },
+        },
+      },
+    },
+    themeSpec,
+  );
   useEffect(() => {
     if (
       themeSpec.palette &&

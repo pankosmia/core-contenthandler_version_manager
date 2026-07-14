@@ -77,6 +77,7 @@ function ChangesTab({
     } else {
       enqueueSnackbar(
         doI18n("pages:content:could_not_fetch_commits", i18nRef.current),
+        `Server error : ${commitsResponse.status} ${commitsResponse.statusText}`,
         { variant: "error" },
       );
     }
