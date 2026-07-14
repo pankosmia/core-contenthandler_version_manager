@@ -81,7 +81,7 @@ function SettingsTab({
         return;
       }
     }
-    console.log("cleanUrl", cleanRemoteUrlValue);
+    // console.log("cleanUrl", cleanRemoteUrlValue);
     const addUrl = `/api/git/remote/add/${repo_path}?remote_name=origin&remote_url=${cleanRemoteUrlValue}`;
     const addResponse = await postEmptyJson(addUrl, debugRef.current);
     if (addResponse.ok) {
