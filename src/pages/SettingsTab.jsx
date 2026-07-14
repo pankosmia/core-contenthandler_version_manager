@@ -270,7 +270,7 @@ function SettingsTab({
           {branchList
             .filter((branch) => !branch.name.includes("/"))
             .map((branch, n) => {
-              console.log(`/api/git/branch/${branch.name}/${repoInfo}`);
+              // console.log(`/api/git/branch/${branch.name}/${repoInfo}`);
               return (
                 <ListItemButton
                   selected={selectedBranchIndex === n}
