@@ -75,8 +75,8 @@
       "fr": "modification(s)"
     },
     "commit_message": {
-      "en": "Label modification",
-      "es": "@Descripción de la etiqueta",
+      "en": "Label for modification(s)",
+      "es": "Descripción de la modificación",
       "fr": "Description de la modification",
       "id": "@Catatan komit"
     },
