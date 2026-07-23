@@ -75,7 +75,7 @@ function SettingsTab({
       if (!deleteResponse.ok) {
         enqueueSnackbar(
           doI18n("pages:content:could_not_delete_remote", i18nRef.current),
-          `Server error : ${deleteResponse.status} ${deleteResponse.statusText} `,
+          `Server error : ${JSON.parse(deleteResponse?.error).reason} `,
           { variant: "error" },
         );
         return;
@@ -93,42 +93,65 @@ function SettingsTab({
       enqueueSnackbar(
         doI18n("pages:content:could_not_add_remote_repo", i18nRef.current),
 
-        `Server error :  ${addResponse.status} ${addResponse.statusText} `,
+        `Server error :  ${JSON.parse(addResponse?.error).reason}`,
         { variant: "error" },
       );
       return;
     }
   };
+
   const addRemoteDownloadedAndUpdate = async (repo_path_origin, repo_path) => {
     let cleanRemoteUrl =
       repo_path_origin && repo_path_origin.replace(".git", "");
     const copyrepo_path = `_local_/_local_/${repo_path && repo_path.split("/")[2].replace(".git", "")}`;
-    const addUrl = `/api/git/remote/add/${copyrepo_path}?remote_name=downloaded&remote_url=${cleanRemoteUrl}`;
-    const addResponse = await postEmptyJson(addUrl, debugRef.current);
-    if (!addResponse.ok) {
-      enqueueSnackbar(
-        doI18n("pages:content:could_not_add_remote_repo", i18nRef.current),
-        `Server error :  ${addResponse.status} ${addResponse.statusText} `,
-        {
-          variant: "error",
-        },
-      );
-      return;
-    }
-    const updatesPath = `_local_/_updates_/${repo_path.split("/")[2]}`;
-    const addUrl2 = `/api/git/remote/add/${copyrepo_path}?remote_name=updates&remote_url=${updatesPath}`;
-    const addResponse2 = await postEmptyJson(addUrl2, debugRef.current);
-    if (!addResponse2.ok) {
-      enqueueSnackbar(
-        doI18n("pages:content:could_not_add_remote_repo", i18nRef.current) +
-          "2",
-        `Server error :  ${addResponse.status} ${addResponse.statusText} `,
 
-        {
-          variant: "error",
-        },
-      );
-      return;
+    const existingRemotesUrl = `/api/git/remotes/${copyrepo_path}`;
+    const existingRemotesResponse = await getJson(
+      existingRemotesUrl,
+      debugRef.current,
+    );
+    const existingRemotes = existingRemotesResponse.ok
+      ? existingRemotesResponse.json.payload.remotes
+      : [];
+
+    const existingDownloaded = existingRemotes.find(
+      (r) => r.name === "downloaded",
+    );
+    if (!existingDownloaded || existingDownloaded.url !== cleanRemoteUrl) {
+      if (existingDownloaded) {
+        const deleteUrl = `/api/git/remote/delete/${copyrepo_path}?remote_name=downloaded`;
+        await postEmptyJson(deleteUrl, debugRef.current);
+      }
+      const addUrl = `/api/git/remote/add/${copyrepo_path}?remote_name=downloaded&remote_url=${cleanRemoteUrl}`;
+      const addResponse = await postEmptyJson(addUrl, debugRef.current);
+      if (!addResponse.ok) {
+        enqueueSnackbar(
+          doI18n("pages:content:could_not_add_remote_repo", i18nRef.current),
+          `Server error : ${JSON.parse(addResponse?.error).reason}`,
+          { variant: "error" },
+        );
+        return;
+      }
+    }
+
+    const updatesPath = `_local_/_updates_/${repo_path.split("/")[2]}`;
+    const existingUpdates = existingRemotes.find((r) => r.name === "updates");
+    if (!existingUpdates || existingUpdates.url !== updatesPath) {
+      if (existingUpdates) {
+        const deleteUrl2 = `/api/git/remote/delete/${copyrepo_path}?remote_name=updates`;
+        await postEmptyJson(deleteUrl2, debugRef.current);
+      }
+      const addUrl2 = `/api/git/remote/add/${copyrepo_path}?remote_name=updates&remote_url=${updatesPath}`;
+      const addResponse2 = await postEmptyJson(addUrl2, debugRef.current);
+      if (!addResponse2.ok) {
+        enqueueSnackbar(
+          doI18n("pages:content:could_not_add_remote_repo", i18nRef.current) +
+            "2",
+          `Server error : ${JSON.parse(addResponse2?.error).reason} `,
+          { variant: "error" },
+        );
+        return;
+      }
     }
   };
 
@@ -205,6 +228,31 @@ function SettingsTab({
     }
   }, [remoteUrlExists]);
 
+  const fetchRemotes = async () => {
+    const remoteListUrl = `/api/git/remotes/${repoInfo}`;
+    const remoteList = await getJson(remoteListUrl, debugRef.current);
+    if (remoteList.ok) {
+      setRemotes(remoteList.json.payload.remotes);
+      const originRecord = remoteList.json.payload.remotes.filter(
+        (p) => p.name === "origin",
+      )[0];
+      if (originRecord) {
+        setRemoteUrlValue(originRecord.url);
+      }
+    } else {
+      enqueueSnackbar(
+        doI18n("pages:content:could_not_list_remotes", i18nRef.current),
+        `Server error : ${remoteList.status} ${remoteList.statusText} `,
+        { variant: "error" },
+      );
+      return;
+    }
+  };
+
+  useEffect(() => {
+    fetchRemotes().then();
+  }, [reposModCount]);
+
   const handleRemoteUrlValidation = async () => {
     if (!remoteUrlValue.startsWith("https://")) {
       setRemoteUrlIsValid(false);
@@ -215,6 +263,7 @@ function SettingsTab({
         remoteUrlValue.split("//")[1],
         repoInfo,
       );
+      await fetchRemotes();
     }
   };
 
