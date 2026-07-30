@@ -49,9 +49,9 @@
       "id": "@Perbarui remote"
     },
     "commit_helper_text": {
-      "en": "A label group together changes to one or more files, using a clear description. Explain why changes were made, to clearly track progress.",
-      "es": "@Las etiquetas crean un historial para tu proyecto, usa nombres que tengan significado. Recomendamos que hagas una etiqueta al día para documentar el progreso.",
-      "fr": "Une étiquette regroupe des modifications d'un ou plusieurs fichiers, en utilisant une description claire. Expliquez pourquoi les modifications ont été faites, afin de suivre clairement le progrès.",
+      "en": "A label describes a set of changes to one or more files, using a clear description. Explain why changes were made, to clearly track progress.",
+      "es": "Una etiqueta describe un conjunto de cambios realizados en uno o más archivos, con una descripción clara. Explique por qué se realizaron los cambios, para poder dar seguimiento al progreso de manera clara.",
+      "fr": "Une étiquette décrit un ensemble de modifications à un ou plusieurs fichiers, en utilisant une description claire. Expliquez pourquoi les modifications ont été faites, afin de suivre clairement le progrès.",
       "id": "@Komit-komit menciptakan sejarah proyek. Gunakan nama yang bermakna. Kami menyarankan satu komitmen per hari untuk mendokumentasikan kemajuan."
     },
     "label": {
