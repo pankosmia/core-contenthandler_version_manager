@@ -8,7 +8,7 @@ import {
   DialogContent,
   DialogContentText,
   IconButton,
-  Grid2,
+  Grid,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -196,7 +196,7 @@ function ChangesTab({
 
   return (
     <Box>
-      <Grid2
+      <Grid
         container
         direction="row"
         sx={{
@@ -207,15 +207,15 @@ function ChangesTab({
         columnSpacing={1}
         rowSpacing={1}
       >
-        <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
+        <Grid item size={{ "@xs": 2, "@md": 1 }}>
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {doI18n(
               "pages:core-contenthandler_version_manager:title_files_modified",
               i18nRef.current,
             )}
           </Typography>
-        </Grid2>
-        <Grid2 item size={12}>
+        </Grid>
+        <Grid item size={12}>
           <Accordion disabled={status.length === 0}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -232,8 +232,8 @@ function ChangesTab({
               )}
             </AccordionDetails>
           </Accordion>
-        </Grid2>
-        <Grid2
+        </Grid>
+        <Grid
           container
           sx={{
             display: "flex",
@@ -243,23 +243,23 @@ function ChangesTab({
           }}
           marginTop={1}
         >
-          <Grid2 item size={12}>
+          <Grid item size={12}>
             <Typography variant="h6" sx={{ fontWeight: "bold" }}>
               {doI18n(
                 "pages:core-contenthandler_version_manager:title_label",
                 i18nRef.current,
               )}
             </Typography>
-          </Grid2>
-          <Grid2 item size={12}>
+          </Grid>
+          <Grid item size={12}>
             <Typography variant="caption">
               {doI18n(
                 "pages:core-contenthandler_version_manager:commit_helper_text",
                 i18nRef.current,
               )}
             </Typography>
-          </Grid2>
-          <Grid2 item size="grow">
+          </Grid>
+          <Grid item size="grow">
             <TextField
               id="commit-message-input"
               fullWidth
@@ -275,12 +275,8 @@ function ChangesTab({
               size={window.innerHeight <= 600 ? "small" : "medium"}
               sx={{ mt: 1 }}
             />
-          </Grid2>
-          <Grid2
-            item
-            size={{ "@xs": 2, "@md": 1 }}
-            sx={{ alignSelf: "center" }}
-          >
+          </Grid>
+          <Grid item size={{ "@xs": 2, "@md": 1 }} sx={{ alignSelf: "center" }}>
             <Button
               fullWidth
               color="secondary"
@@ -291,11 +287,11 @@ function ChangesTab({
             >
               {doI18n("pages:content:accept", i18nRef.current)}
             </Button>
-          </Grid2>
-        </Grid2>
-      </Grid2>
+          </Grid>
+        </Grid>
+      </Grid>
 
-      <Grid2
+      <Grid
         container
         direction="row"
         sx={{
@@ -308,15 +304,15 @@ function ChangesTab({
         gap={1}
         marginTop={5}
       >
-        <Grid2 item size={12}>
+        <Grid item size={12}>
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {doI18n(
               "pages:core-contenthandler_version_manager:title_modification_label",
               i18nRef.current,
             )}
           </Typography>
-        </Grid2>
-        <Grid2 item size="grow">
+        </Grid>
+        <Grid item size="grow">
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -337,8 +333,8 @@ function ChangesTab({
               )}
             </AccordionDetails>
           </Accordion>
-        </Grid2>
-        <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
+        </Grid>
+        <Grid item size={{ "@xs": 2, "@md": 1 }}>
           <Tooltip
             title={
               !enabledRef.current
@@ -399,8 +395,8 @@ function ChangesTab({
               </IconButton>
             </span>
           </Tooltip>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
 
       <PushToDcs
         repoPath={repoPath}
