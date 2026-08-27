@@ -13,7 +13,7 @@ import {
   Popover,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
-import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
+import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
 import { postEmptyJson, getJson } from "pankosmia-lib/http";
 import { doI18n } from "pankosmia-lib/i18n";
 import { debugContext, i18nContext } from "pankosmia-rcl";
@@ -423,7 +423,7 @@ function SettingsTab({
                 onClick={handleNewBranchValidation}
                 disabled={newBranchValue === ""}
               >
-                <AddCircleOutlineIcon />
+                <AddCircleOutlineOutlinedIcon />
               </IconButton>
             </Box>
           </Box>
