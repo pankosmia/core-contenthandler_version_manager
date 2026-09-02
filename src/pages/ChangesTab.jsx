@@ -162,11 +162,9 @@ function ChangesTab({
     const [, monStr, day, hour, min, sec, year, offSign, offH, offM] = m;
     const month = MONTHS.indexOf(monStr);
     if (month === -1) return 0;
-
     const wallClockAsUtc = Date.UTC(+year, month, +day, +hour, +min, +sec);
     const offsetMillis =
       (offSign === "-" ? -1 : 1) * (+offH * 60 + +offM) * 60000;
-
     return wallClockAsUtc - offsetMillis;
   };
 
@@ -200,7 +198,7 @@ function ChangesTab({
     {
       field: "date",
       headerName: doI18n("pages:content:row_date", i18nRef.current),
-      sortComparator: (v1, v2) => parseGitDate(v1) - parseGitDate(v2),
+      renderCell: ({ row }) => row.displayDate,
     },
     {
       field: "message",
@@ -214,7 +212,8 @@ function ChangesTab({
       id: n,
       commitId: c.id,
       author: c.author,
-      date: c.date,
+      displayDate: c.date,
+      date: parseGitDate(c.date),
       message: c.message,
     }))
     .sort((a, b) => parseGitDate(b.date) - parseGitDate(a.date));
@@ -357,7 +356,11 @@ function ChangesTab({
             </AccordionSummary>
             <AccordionDetails>
               {commits.length > 0 ? (
-                <PanTable columns={commitsColumns} rows={commitsRows} />
+                <PanTable
+                  columns={commitsColumns}
+                  rows={commitsRows}
+                  initialState={{ sorting: { order: "desc", field: "date" } }}
+                />
               ) : (
                 <Typography variant="h6">
                   {doI18n("pages:content:no_commits", i18nRef.current)}
