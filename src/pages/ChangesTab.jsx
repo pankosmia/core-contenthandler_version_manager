@@ -139,6 +139,35 @@ function ChangesTab({
     }
   };
 
+  const GIT_DATE_RE =
+    /^\w{3}\s+(\w{3})\s+(\d{1,2})\s+(\d{2}):(\d{2}):(\d{2})\s+(\d{4})\s+([+-])(\d{2})(\d{2})$/;
+  const MONTHS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const parseGitDate = (dateStr) => {
+    const m = GIT_DATE_RE.exec(dateStr);
+    if (!m) return 0;
+    const [, monStr, day, hour, min, sec, year, offSign, offH, offM] = m;
+    const month = MONTHS.indexOf(monStr);
+    if (month === -1) return 0;
+    const wallClockAsUtc = Date.UTC(+year, month, +day, +hour, +min, +sec);
+    const offsetMillis =
+      (offSign === "-" ? -1 : 1) * (+offH * 60 + +offM) * 60000;
+    return wallClockAsUtc - offsetMillis;
+  };
+
   const statusColumns = [
     {
       field: "status",
@@ -169,6 +198,7 @@ function ChangesTab({
     {
       field: "date",
       headerName: doI18n("pages:content:row_date", i18nRef.current),
+      renderCell: ({ row }) => row.displayDate,
     },
     {
       field: "message",
@@ -176,16 +206,17 @@ function ChangesTab({
     },
   ];
 
-  const commitsRows = commits.map((c, n) => {
-    return {
+  const commitsRows = commits
+    .map((c, n) => ({
       ...c,
       id: n,
       commitId: c.id,
       author: c.author,
-      date: c.date,
+      displayDate: c.date,
+      date: parseGitDate(c.date),
       message: c.message,
-    };
-  });
+    }))
+    .sort((a, b) => parseGitDate(b.date) - parseGitDate(a.date));
 
   const branches = remotes.map((b) => b.name);
   const syncBranches =
@@ -325,7 +356,11 @@ function ChangesTab({
             </AccordionSummary>
             <AccordionDetails>
               {commits.length > 0 ? (
-                <PanTable columns={commitsColumns} rows={commitsRows} />
+                <PanTable
+                  columns={commitsColumns}
+                  rows={commitsRows}
+                  initialState={{ sorting: { order: "desc", field: "date" } }}
+                />
               ) : (
                 <Typography variant="h6">
                   {doI18n("pages:content:no_commits", i18nRef.current)}
