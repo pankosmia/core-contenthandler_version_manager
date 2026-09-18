@@ -1,5 +1,5 @@
 import { createRoot } from "react-dom/client";
-import { getAndSetJson } from "pithekos-lib";
+import { getAndSetJson } from "pankosmia-lib/http";
 import { createHashRouter, RouterProvider } from "react-router-dom";
 import "./index.css";
 import VersionManager from "./pages/VersionManager";
@@ -20,7 +20,34 @@ const router = createHashRouter([
 ]);
 function AppLayout() {
   const [themeSpec, setThemeSpec] = useState(fallbackTheme);
-  const theme = createTheme(themeSpec);
+  const theme = createTheme(
+    {
+      components: {
+        MuiFab: {
+          styleOverrides: {
+            root: {
+              textTransform: "capitalize",
+            },
+          },
+        },
+        MuiButton: {
+          styleOverrides: {
+            root: {
+              textTransform: "capitalize",
+            },
+          },
+        },
+        MuiTab: {
+          styleOverrides: {
+            root: {
+              textTransform: "capitalize",
+            },
+          },
+        },
+      },
+    },
+    themeSpec,
+  );
   useEffect(() => {
     if (
       themeSpec.palette &&

@@ -8,12 +8,13 @@ import {
   DialogContent,
   DialogContentText,
   IconButton,
-  Grid2,
+  Grid,
   Accordion,
   AccordionSummary,
   AccordionDetails,
 } from "@mui/material";
-import { doI18n, postJson, getJson } from "pithekos-lib";
+import { postJson, getJson } from "pankosmia-lib/http";
+import { doI18n } from "pankosmia-lib/i18n";
 import {
   debugContext,
   i18nContext,
@@ -69,13 +70,14 @@ function ChangesTab({
   };
 
   const repoCommits = async (repo_path) => {
-    const commitsUrl = `/api//git/log/${repo_path}`;
+    const commitsUrl = `/api/git/log/${repo_path}`;
     const commitsResponse = await getJson(commitsUrl, debugRef.current);
     if (commitsResponse.ok) {
       setCommits(commitsResponse.json);
     } else {
       enqueueSnackbar(
         doI18n("pages:content:could_not_fetch_commits", i18nRef.current),
+        `Server error : ${commitsResponse.status} ${commitsResponse.statusText}`,
         { variant: "error" },
       );
     }
@@ -137,6 +139,35 @@ function ChangesTab({
     }
   };
 
+  const GIT_DATE_RE =
+    /^\w{3}\s+(\w{3})\s+(\d{1,2})\s+(\d{2}):(\d{2}):(\d{2})\s+(\d{4})\s+([+-])(\d{2})(\d{2})$/;
+  const MONTHS = [
+    "Jan",
+    "Feb",
+    "Mar",
+    "Apr",
+    "May",
+    "Jun",
+    "Jul",
+    "Aug",
+    "Sep",
+    "Oct",
+    "Nov",
+    "Dec",
+  ];
+
+  const parseGitDate = (dateStr) => {
+    const m = GIT_DATE_RE.exec(dateStr);
+    if (!m) return 0;
+    const [, monStr, day, hour, min, sec, year, offSign, offH, offM] = m;
+    const month = MONTHS.indexOf(monStr);
+    if (month === -1) return 0;
+    const wallClockAsUtc = Date.UTC(+year, month, +day, +hour, +min, +sec);
+    const offsetMillis =
+      (offSign === "-" ? -1 : 1) * (+offH * 60 + +offM) * 60000;
+    return wallClockAsUtc - offsetMillis;
+  };
+
   const statusColumns = [
     {
       field: "status",
@@ -167,6 +198,7 @@ function ChangesTab({
     {
       field: "date",
       headerName: doI18n("pages:content:row_date", i18nRef.current),
+      renderCell: ({ row }) => row.displayDate,
     },
     {
       field: "message",
@@ -174,16 +206,17 @@ function ChangesTab({
     },
   ];
 
-  const commitsRows = commits.map((c, n) => {
-    return {
+  const commitsRows = commits
+    .map((c, n) => ({
       ...c,
       id: n,
       commitId: c.id,
       author: c.author,
-      date: c.date,
+      displayDate: c.date,
+      date: parseGitDate(c.date),
       message: c.message,
-    };
-  });
+    }))
+    .sort((a, b) => parseGitDate(b.date) - parseGitDate(a.date));
 
   const branches = remotes.map((b) => b.name);
   const syncBranches =
@@ -194,7 +227,7 @@ function ChangesTab({
 
   return (
     <Box>
-      <Grid2
+      <Grid
         container
         direction="row"
         sx={{
@@ -205,15 +238,15 @@ function ChangesTab({
         columnSpacing={1}
         rowSpacing={1}
       >
-        <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
+        <Grid item size={{ "@xs": 2, "@md": 1 }}>
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {doI18n(
               "pages:core-contenthandler_version_manager:title_files_modified",
               i18nRef.current,
             )}
           </Typography>
-        </Grid2>
-        <Grid2 item size={12}>
+        </Grid>
+        <Grid item size={12}>
           <Accordion disabled={status.length === 0}>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -230,8 +263,8 @@ function ChangesTab({
               )}
             </AccordionDetails>
           </Accordion>
-        </Grid2>
-        <Grid2
+        </Grid>
+        <Grid
           container
           sx={{
             display: "flex",
@@ -241,23 +274,23 @@ function ChangesTab({
           }}
           marginTop={1}
         >
-          <Grid2 item size={12}>
+          <Grid item size={12}>
             <Typography variant="h6" sx={{ fontWeight: "bold" }}>
               {doI18n(
                 "pages:core-contenthandler_version_manager:title_label",
                 i18nRef.current,
               )}
             </Typography>
-          </Grid2>
-          <Grid2 item size={12}>
+          </Grid>
+          <Grid item size={12}>
             <Typography variant="caption">
               {doI18n(
                 "pages:core-contenthandler_version_manager:commit_helper_text",
                 i18nRef.current,
               )}
             </Typography>
-          </Grid2>
-          <Grid2 item size="grow">
+          </Grid>
+          <Grid item size="grow">
             <TextField
               id="commit-message-input"
               fullWidth
@@ -273,12 +306,8 @@ function ChangesTab({
               size={window.innerHeight <= 600 ? "small" : "medium"}
               sx={{ mt: 1 }}
             />
-          </Grid2>
-          <Grid2
-            item
-            size={{ "@xs": 2, "@md": 1 }}
-            sx={{ alignSelf: "center" }}
-          >
+          </Grid>
+          <Grid item size={{ "@xs": 2, "@md": 1 }} sx={{ alignSelf: "center" }}>
             <Button
               fullWidth
               color="secondary"
@@ -289,11 +318,11 @@ function ChangesTab({
             >
               {doI18n("pages:content:accept", i18nRef.current)}
             </Button>
-          </Grid2>
-        </Grid2>
-      </Grid2>
+          </Grid>
+        </Grid>
+      </Grid>
 
-      <Grid2
+      <Grid
         container
         direction="row"
         sx={{
@@ -306,15 +335,15 @@ function ChangesTab({
         gap={1}
         marginTop={5}
       >
-        <Grid2 item size={12}>
+        <Grid item size={12}>
           <Typography variant="h6" sx={{ fontWeight: "bold" }}>
             {doI18n(
               "pages:core-contenthandler_version_manager:title_modification_label",
               i18nRef.current,
             )}
           </Typography>
-        </Grid2>
-        <Grid2 item size="grow">
+        </Grid>
+        <Grid item size="grow">
           <Accordion>
             <AccordionSummary
               expandIcon={<ExpandMoreIcon />}
@@ -327,7 +356,11 @@ function ChangesTab({
             </AccordionSummary>
             <AccordionDetails>
               {commits.length > 0 ? (
-                <PanTable columns={commitsColumns} rows={commitsRows} />
+                <PanTable
+                  columns={commitsColumns}
+                  rows={commitsRows}
+                  initialState={{ sorting: { order: "desc", field: "date" } }}
+                />
               ) : (
                 <Typography variant="h6">
                   {doI18n("pages:content:no_commits", i18nRef.current)}
@@ -335,8 +368,8 @@ function ChangesTab({
               )}
             </AccordionDetails>
           </Accordion>
-        </Grid2>
-        <Grid2 item size={{ "@xs": 2, "@md": 1 }}>
+        </Grid>
+        <Grid item size={{ "@xs": 2, "@md": 1 }}>
           <Tooltip
             title={
               !enabledRef.current
@@ -397,8 +430,8 @@ function ChangesTab({
               </IconButton>
             </span>
           </Tooltip>
-        </Grid2>
-      </Grid2>
+        </Grid>
+      </Grid>
 
       <PushToDcs
         repoPath={repoPath}
