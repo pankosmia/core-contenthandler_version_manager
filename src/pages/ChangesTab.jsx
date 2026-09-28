@@ -25,7 +25,7 @@ import {
 } from "pankosmia-rcl";
 import { enqueueSnackbar } from "notistack";
 import PushToDcs from "./PushToDcs";
-import PullFromDownloadedOrSideLoad from "./PullFromDownloaded";
+import PullFromDownloadedOrSideLoaded from "./PullFromDownloadedOrSideLoaded";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -454,7 +454,7 @@ function ChangesTab({
         closeFn={() => setPushAnchorEl(null)}
         status={status}
       />
-      <PullFromDownloadedOrSideLoad
+      <PullFromDownloadedOrSideLoaded
         repoPath={repoPath}
         repoName={repoName}
         open={pullOpen}

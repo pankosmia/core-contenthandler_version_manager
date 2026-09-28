@@ -10,7 +10,7 @@ import {
 } from "pankosmia-rcl";
 import { enqueueSnackbar } from "notistack";
 
-function PullFromDownloadedOrSideLoad({
+function PullFromDownloadedOrSideLoaded({
   repoPath,
   repoName,
   open,
@@ -205,4 +205,4 @@ function PullFromDownloadedOrSideLoad({
   );
 }
 
-export default PullFromDownloadedOrSideLoad;
+export default PullFromDownloadedOrSideLoaded;
