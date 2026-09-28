@@ -84,6 +84,10 @@
       "en": "Share",
       "es": "Compartir",
       "fr": "Partager"
+    },
+    "could_not_add_remote_repo_sideloaded": {
+      "en": "Cannot change the online sharing URL for copy of sideloaded ressources",
+      "fr": "Il est impossible de changer l'URL de partage pour des ressources copier de sideload"
     }
   }
 }
