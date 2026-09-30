@@ -25,7 +25,7 @@ import {
 } from "pankosmia-rcl";
 import { enqueueSnackbar } from "notistack";
 import PushToDcs from "./PushToDcs";
-import PullFromDownloaded from "./PullFromDownloaded";
+import PullFromDownloadedOrSideLoaded from "./PullFromDownloadedOrSideLoaded";
 import ShareOutlinedIcon from "@mui/icons-material/ShareOutlined";
 import UpdateOutlinedIcon from "@mui/icons-material/UpdateOutlined";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
@@ -218,9 +218,18 @@ function ChangesTab({
     }))
     .sort((a, b) => parseGitDate(b.date) - parseGitDate(a.date));
 
-  const branches = remotes.map((b) => b.name);
+  const remotesNames = remotes.map((b) => b.name);
   const syncBranches =
-    branches.includes("downloaded") && branches.includes("updates");
+    (remotesNames.includes("sideloaded") &&
+      remotesNames.includes("updates") &&
+      !remotesNames.includes("downloaded")) ||
+    (!remotesNames.includes("sideloaded") &&
+      remotesNames.includes("updates") &&
+      remotesNames.includes("downloaded"));
+
+  const ErrorRemotes =
+    remotesNames.includes("sideloaded") && remotesNames.includes("downloaded");
+
   const originBranch = remotes
     .map((b) => b.name)
     .filter((name) => name.includes("origin"));
@@ -406,15 +415,20 @@ function ChangesTab({
           </Tooltip>
           <Tooltip
             title={
-              !syncBranches
+              ErrorRemotes
                 ? doI18n(
-                    "pages:core-contenthandler_version_manager:sync_repo",
+                    "pages:core-contenthandler_version_manager:error_two_sources_of_truth",
                     i18nRef.current,
                   )
-                : doI18n(
-                    "pages:core-contenthandler_version_manager:synchronisation",
-                    i18nRef.current,
-                  )
+                : !syncBranches
+                  ? doI18n(
+                      "pages:core-contenthandler_version_manager:sync_repo",
+                      i18nRef.current,
+                    )
+                  : doI18n(
+                      "pages:core-contenthandler_version_manager:synchronisation",
+                      i18nRef.current,
+                    )
             }
           >
             <span>
@@ -424,7 +438,7 @@ function ChangesTab({
                 onClick={(event) => {
                   setPullAnchorEl(event.currentTarget);
                 }}
-                disabled={status.length > 0 || !syncBranches}
+                disabled={status.length > 0 || !syncBranches || ErrorRemotes}
               >
                 <UpdateOutlinedIcon />
               </IconButton>
@@ -440,7 +454,7 @@ function ChangesTab({
         closeFn={() => setPushAnchorEl(null)}
         status={status}
       />
-      <PullFromDownloaded
+      <PullFromDownloadedOrSideLoaded
         repoPath={repoPath}
         repoName={repoName}
         open={pullOpen}

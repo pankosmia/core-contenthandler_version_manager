@@ -88,6 +88,19 @@
     "could_not_add_remote_repo_sideloaded": {
       "en": "Cannot change the online sharing URL for copy of sideloaded ressources",
       "fr": "Il est impossible de changer l'URL de partage pour des ressources copier de sideload"
+    },
+    "error_two_sources_of_truth": {
+      "en": "Cannot sync: You have Downloaded and Sideloaded remote for you local copy.",
+      "fr": "Synchronisation impossible : Vous avez Downloaded et Sideloaded remote pour votre copie local"
+    },
+    "pulledFromDownloaded": {
+      "en": "Synchronized with downloaded",
+      "fr": "Synchronisé avec la version téléchargée",
+      "id": "@Pembaruan diambil dari repo yang diunduh"
+    },
+    "pulledFromSideloaded": {
+      "en": "Synchronized with Sideloaded",
+      "fr": "Synchronisé avec la version sideloadé"
     }
   }
 }

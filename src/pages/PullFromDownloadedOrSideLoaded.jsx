@@ -10,7 +10,7 @@ import {
 } from "pankosmia-rcl";
 import { enqueueSnackbar } from "notistack";
 
-function PullFromDownloaded({
+function PullFromDownloadedOrSideLoaded({
   repoPath,
   repoName,
   open,
@@ -46,10 +46,10 @@ function PullFromDownloaded({
       closeFn();
       return;
     }
-    const downloadRemote = remoteList.json.payload.remotes.filter(
-      (i) => i.name === "downloaded",
+    const SyncRemote = remoteList.json.payload.remotes.filter(
+      (i) => i.name === "sideloaded" || i.name === "downloaded",
     )[0];
-    if (!downloadRemote) {
+    if (!SyncRemote) {
       enqueueSnackbar(
         doI18n(
           "pages:content:could_not_find_downloaded_remote",
@@ -60,7 +60,7 @@ function PullFromDownloaded({
       closeFn();
       return;
     }
-    const downloadRepoUri = downloadRemote.url;
+    const downloadRepoUri = SyncRemote.url;
     const downloadRepoPath = downloadRepoUri
       .replace("file://", "")
       .split("/")
@@ -162,10 +162,21 @@ function PullFromDownloaded({
       );
     }
 
-    // The end!
-    enqueueSnackbar(doI18n("pages:content:pulled", i18nRef.current), {
-      variant: "success",
-    });
+    // The end! === ""
+    enqueueSnackbar(
+      SyncRemote.name === "downloaded"
+        ? doI18n(
+            "pages:core-contenthandler_version_manager:pulledFromDownloaded",
+            i18nRef.current,
+          )
+        : doI18n(
+            "pages:core-contenthandler_version_manager:pulledFromSideloaded",
+            i18nRef.current,
+          ),
+      {
+        variant: "success",
+      },
+    );
     closeFn();
   };
 
@@ -194,4 +205,4 @@ function PullFromDownloaded({
   );
 }
 
-export default PullFromDownloaded;
+export default PullFromDownloadedOrSideLoaded;
