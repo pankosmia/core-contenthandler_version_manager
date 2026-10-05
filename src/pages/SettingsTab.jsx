@@ -117,18 +117,6 @@ function SettingsTab({
     const existingDownloaded = existingRemotes.find(
       (r) => r.name === "downloaded",
     );
-    const existingSideLoad = existingRemotes.find(
-      (r) => r.name === "sideloaded",
-    );
-    if (existingSideLoad) {
-      enqueueSnackbar(
-        doI18n(
-          "pages:core-contenthandler_version_manager:could_not_add_remote_repo_sideloaded",
-          i18nRef.current,
-        ) + { variant: "error" },
-      );
-      return false;
-    }
     if (!existingDownloaded || existingDownloaded.url !== cleanRemoteUrl) {
       if (existingDownloaded) {
         const deleteUrl = `/api/git/remote/delete/${copyrepo_path}?remote_name=downloaded`;
@@ -309,52 +297,24 @@ function SettingsTab({
             justifyContent: "flex-end",
           }}
         >
-          {remotes.find((e) => e.name === "sideloaded") ? (
-            <Tooltip
-              title={doI18n(
-                "pages:core-contenthandler_version_manager:could_not_add_remote_repo_sideloaded",
-                i18nRef.current,
-              )}
-            >
-              <TextField
-                id="repo-url"
-                fullWidth
-                inputRef={remoteUrlRef}
-                label={doI18n("pages:content:remote_repo_url", i18nRef.current)}
-                value={remoteUrlValue}
-                variant="outlined"
-                disabled={remotes.find((e) => e.name === "sideloaded")}
-                onChange={(e) => {
-                  setRemoteUrlValue(e.target.value);
-                  setRemoteUrlIsValid(true);
-                }}
-                helperText={doI18n(
-                  "pages:content:remote_url_requirement",
-                  i18nRef.current,
-                )}
-                error={remoteUrlIsValid === false}
-              />
-            </Tooltip>
-          ) : (
-            <TextField
-              id="repo-url"
-              fullWidth
-              inputRef={remoteUrlRef}
-              label={doI18n("pages:content:remote_repo_url", i18nRef.current)}
-              value={remoteUrlValue}
-              variant="outlined"
-              disabled={remotes.find((e) => e.name === "sideloaded")}
-              onChange={(e) => {
-                setRemoteUrlValue(e.target.value);
-                setRemoteUrlIsValid(true);
-              }}
-              helperText={doI18n(
-                "pages:content:remote_url_requirement",
-                i18nRef.current,
-              )}
-              error={remoteUrlIsValid === false}
-            />
-          )}
+          <TextField
+            id="repo-url"
+            fullWidth
+            inputRef={remoteUrlRef}
+            label={doI18n("pages:content:remote_repo_url", i18nRef.current)}
+            value={remoteUrlValue}
+            variant="outlined"
+            onChange={(e) => {
+              setRemoteUrlValue(e.target.value);
+              setRemoteUrlIsValid(true);
+            }}
+            helperText={doI18n(
+              "pages:content:remote_url_requirement",
+              i18nRef.current,
+            )}
+            error={remoteUrlIsValid === false}
+          />
+
           <Box sx={{ pb: 3, pl: 1, pt: 1.5 }}>
             <Button
               onClick={handleRemoteUrlValidation}
