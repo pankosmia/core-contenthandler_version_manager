@@ -265,8 +265,8 @@ function SettingsTab({
       );
       if (ok) {
         await addRemoteRepo(repoInfo);
+        await fetchRemotes();
       }
-      await fetchRemotes();
     }
   };
 
