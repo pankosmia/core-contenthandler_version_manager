@@ -11,6 +11,7 @@ import {
   Box,
   IconButton,
   Popover,
+  Tooltip,
 } from "@mui/material";
 import DoneIcon from "@mui/icons-material/Done";
 import AddCircleOutlineOutlinedIcon from "@mui/icons-material/AddCircleOutlineOutlined";
@@ -74,8 +75,8 @@ function SettingsTab({
       const deleteResponse = await postEmptyJson(deleteUrl, debugRef.current);
       if (!deleteResponse.ok) {
         enqueueSnackbar(
-          doI18n("pages:content:could_not_delete_remote", i18nRef.current),
-          `Server error : ${JSON.parse(deleteResponse?.error).reason} `,
+          doI18n("pages:content:could_not_delete_remote", i18nRef.current) +
+            ` Server error : ${JSON.parse(deleteResponse?.error).reason} `,
           { variant: "error" },
         );
         return;
@@ -91,9 +92,8 @@ function SettingsTab({
       );
     } else {
       enqueueSnackbar(
-        doI18n("pages:content:could_not_add_remote_repo", i18nRef.current),
-
-        `Server error :  ${JSON.parse(addResponse?.error).reason}`,
+        doI18n("pages:content:could_not_add_remote_repo", i18nRef.current) +
+          ` Server error :  ${JSON.parse(addResponse?.error).reason}`,
         { variant: "error" },
       );
       return;
@@ -126,11 +126,11 @@ function SettingsTab({
       const addResponse = await postEmptyJson(addUrl, debugRef.current);
       if (!addResponse.ok) {
         enqueueSnackbar(
-          doI18n("pages:content:could_not_add_remote_repo", i18nRef.current),
-          `Server error : ${JSON.parse(addResponse?.error).reason}`,
+          doI18n("pages:content:could_not_add_remote_repo", i18nRef.current) +
+            ` Server error : ${JSON.parse(addResponse?.error).reason}`,
           { variant: "error" },
         );
-        return;
+        return false;
       }
     }
 
@@ -150,9 +150,10 @@ function SettingsTab({
           `Server error : ${JSON.parse(addResponse2?.error).reason} `,
           { variant: "error" },
         );
-        return;
+        return false;
       }
     }
+    return true;
   };
 
   const repoBranches = async (repo_path) => {
@@ -258,12 +259,14 @@ function SettingsTab({
       setRemoteUrlIsValid(false);
     } else {
       setRemoteUrlIsValid(true);
-      await addRemoteRepo(repoInfo);
-      await addRemoteDownloadedAndUpdate(
+      let ok = await addRemoteDownloadedAndUpdate(
         remoteUrlValue.split("//")[1],
         repoInfo,
       );
-      await fetchRemotes();
+      if (ok) {
+        await addRemoteRepo(repoInfo);
+        await fetchRemotes();
+      }
     }
   };
 
@@ -311,6 +314,7 @@ function SettingsTab({
             )}
             error={remoteUrlIsValid === false}
           />
+
           <Box sx={{ pb: 3, pl: 1, pt: 1.5 }}>
             <Button
               onClick={handleRemoteUrlValidation}
